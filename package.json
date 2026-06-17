@@ -9,9 +9,10 @@
   "exports": {
     ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
     "./tailwind-preset": "./tailwind-preset.js",
+    "./eslint-config": "./eslint-config.js",
     "./styles.css": "./styles.css"
   },
-  "files": ["dist", "src", "styles.css", "tailwind-preset.js"],
+  "files": ["dist", "src", "styles.css", "tailwind-preset.js", "eslint-config.js"],
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node scripts/postbuild.mjs",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
