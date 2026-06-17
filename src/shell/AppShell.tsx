@@ -13,6 +13,7 @@ export default function AppShell({
   isAdmin,
   hubUrl,
   nav,
+  themeToggle = true,
   children,
 }: {
   appName: string
@@ -22,11 +23,12 @@ export default function AppShell({
   isAdmin?: boolean
   hubUrl?: string
   nav?: NavGroup[]
+  themeToggle?: boolean
   children: React.ReactNode
 }) {
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
-      <Topbar appName={appName} apps={apps} currentKey={currentKey} user={user} isAdmin={isAdmin} hubUrl={hubUrl} />
+      <Topbar appName={appName} apps={apps} currentKey={currentKey} user={user} isAdmin={isAdmin} hubUrl={hubUrl} themeToggle={themeToggle} />
       <div className="mx-auto flex w-full max-w-[1400px]">
         {nav && nav.length > 0 && (
           <aside className="hidden w-60 shrink-0 border-r border-neutral-200 dark:border-neutral-700 md:block">

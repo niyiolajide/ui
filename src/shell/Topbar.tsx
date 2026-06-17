@@ -11,6 +11,7 @@ export default function Topbar({
   isAdmin,
   hubUrl,
   left,
+  themeToggle = true,
 }: {
   appName: string
   apps: AppInfo[]
@@ -19,6 +20,8 @@ export default function Topbar({
   isAdmin?: boolean
   hubUrl?: string
   left?: React.ReactNode
+  /** Show the light/dark toggle. Set false for apps that don't yet support dark mode. */
+  themeToggle?: boolean
 }) {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-neutral-200 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/80 px-4 backdrop-blur">
@@ -26,7 +29,7 @@ export default function Topbar({
       <span className="font-display text-lg leading-none text-neutral-900 dark:text-neutral-50">{appName}</span>
       <div className="ml-auto flex items-center gap-1">
         <AppSwitcher apps={apps} currentKey={currentKey} />
-        <ThemeToggle />
+        {themeToggle && <ThemeToggle />}
         <UserMenu user={user} isAdmin={isAdmin} hubUrl={hubUrl} />
       </div>
     </header>
