@@ -3,8 +3,8 @@
  * the base/component layer (shipped as a Tailwind plugin so it's processed natively
  * by each app — no CSS @import / postcss-import needed).
  *
- * Apps consume it via `presets: [require('@niyi/ui/tailwind-preset')]` and must add
- * './node_modules/@niyi/ui/dist/**/*.js' to their `content` globs.
+ * Apps consume it via `presets: [require('@niyi/ui/tailwind-preset')]` and must also
+ * add the compiled package dist (node_modules/@niyi/ui/dist) to their `content` globs.
  */
 const plugin = require('tailwindcss/plugin')
 
