@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ThemeToggle = exports.useTheme = exports.ThemeProvider = exports.PageEmptyState = exports.PageErrorState = exports.SegmentedControl = exports.Pagination = exports.Modal = exports.EmptyState = exports.LoadingSpinner = exports.PageHeader = exports.StatCard = exports.Badge = exports.Input = exports.Card = exports.Button = exports.cn = void 0;
+exports.UserMenu = exports.AppSwitcher = exports.Sidebar = exports.Topbar = exports.AppShell = exports.ThemeToggle = exports.useTheme = exports.ThemeProvider = exports.PageEmptyState = exports.PageErrorState = exports.SegmentedControl = exports.Pagination = exports.Modal = exports.EmptyState = exports.LoadingSpinner = exports.PageHeader = exports.StatCard = exports.Badge = exports.Input = exports.Card = exports.Button = exports.cn = void 0;
 // @niyi/ui — shared design-system primitives. Import the Tailwind preset separately
 // (`@niyi/ui/tailwind-preset`) and the base CSS (`@niyi/ui/styles.css`).
 var cn_1 = require("./cn");
@@ -38,3 +38,14 @@ Object.defineProperty(exports, "ThemeProvider", { enumerable: true, get: functio
 Object.defineProperty(exports, "useTheme", { enumerable: true, get: function () { return ThemeProvider_1.useTheme; } });
 var ThemeToggle_1 = require("./theme/ThemeToggle");
 Object.defineProperty(exports, "ThemeToggle", { enumerable: true, get: function () { return __importDefault(ThemeToggle_1).default; } });
+// Shell (cross-app chrome)
+var AppShell_1 = require("./shell/AppShell");
+Object.defineProperty(exports, "AppShell", { enumerable: true, get: function () { return __importDefault(AppShell_1).default; } });
+var Topbar_1 = require("./shell/Topbar");
+Object.defineProperty(exports, "Topbar", { enumerable: true, get: function () { return __importDefault(Topbar_1).default; } });
+var Sidebar_1 = require("./shell/Sidebar");
+Object.defineProperty(exports, "Sidebar", { enumerable: true, get: function () { return __importDefault(Sidebar_1).default; } });
+var AppSwitcher_1 = require("./shell/AppSwitcher");
+Object.defineProperty(exports, "AppSwitcher", { enumerable: true, get: function () { return __importDefault(AppSwitcher_1).default; } });
+var UserMenu_1 = require("./shell/UserMenu");
+Object.defineProperty(exports, "UserMenu", { enumerable: true, get: function () { return __importDefault(UserMenu_1).default; } });
