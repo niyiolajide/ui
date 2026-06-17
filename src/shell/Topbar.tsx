@@ -11,6 +11,7 @@ export default function Topbar({
   isAdmin,
   hubUrl,
   left,
+  actions,
   themeToggle = true,
 }: {
   appName: string
@@ -20,6 +21,8 @@ export default function Topbar({
   isAdmin?: boolean
   hubUrl?: string
   left?: React.ReactNode
+  /** App-specific topbar items (e.g. a notifications bell), shown before the switcher. */
+  actions?: React.ReactNode
   /** Show the light/dark toggle. Set false for apps that don't yet support dark mode. */
   themeToggle?: boolean
 }) {
@@ -28,6 +31,7 @@ export default function Topbar({
       {left}
       <span className="font-display text-lg leading-none text-neutral-900 dark:text-neutral-50">{appName}</span>
       <div className="ml-auto flex items-center gap-1">
+        {actions}
         <AppSwitcher apps={apps} currentKey={currentKey} />
         {themeToggle && <ThemeToggle />}
         <UserMenu user={user} isAdmin={isAdmin} hubUrl={hubUrl} />
