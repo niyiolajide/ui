@@ -69,25 +69,32 @@ export default function Modal({
     }
   }, [onClose, loading])
 
+  // Keydown listener (focus trap + Escape). Re-binds when handleKeyDown changes.
   useEffect(() => {
     if (!open) return
     document.addEventListener('keydown', handleKeyDown)
-
-    // Auto-focus the first focusable element
-    const timer = setTimeout(() => {
-      if (dialogRef.current) {
-        const focusable = dialogRef.current.querySelector<HTMLElement>(
-          'button:not([disabled]), [href], input:not([disabled])'
-        )
-        focusable?.focus()
-      }
-    }, 50)
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      clearTimeout(timer)
-    }
+    return () => document.removeEventListener('keydown', handleKeyDown)
   }, [open, handleKeyDown])
+
+  // Auto-focus the first focusable element — ONCE, when the modal opens.
+  // Deps are intentionally just [open]: the previous version also depended on
+  // handleKeyDown, so any consumer re-render that changed handleKeyDown's identity
+  // (e.g. an unstable onClose/loading) re-ran this effect and yanked the cursor
+  // back to the first input on every keystroke. The contains() guard is belt-and-
+  // suspenders: even if this ever re-runs, it must never steal focus from a control
+  // the user is already editing inside the dialog.
+  useEffect(() => {
+    if (!open) return
+    const timer = setTimeout(() => {
+      const dialog = dialogRef.current
+      if (!dialog || dialog.contains(document.activeElement)) return
+      const focusable = dialog.querySelector<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])'
+      )
+      focusable?.focus()
+    }, 50)
+    return () => clearTimeout(timer)
+  }, [open])
 
   if (!open) return null
 

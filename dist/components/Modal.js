@@ -50,22 +50,32 @@ function Modal({ open, onClose, title, children, confirmLabel, confirmVariant = 
             }
         }
     }, [onClose, loading]);
+    // Keydown listener (focus trap + Escape). Re-binds when handleKeyDown changes.
     (0, react_1.useEffect)(() => {
         if (!open)
             return;
         document.addEventListener('keydown', handleKeyDown);
-        // Auto-focus the first focusable element
-        const timer = setTimeout(() => {
-            if (dialogRef.current) {
-                const focusable = dialogRef.current.querySelector('button:not([disabled]), [href], input:not([disabled])');
-                focusable?.focus();
-            }
-        }, 50);
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-            clearTimeout(timer);
-        };
+        return () => document.removeEventListener('keydown', handleKeyDown);
     }, [open, handleKeyDown]);
+    // Auto-focus the first focusable element — ONCE, when the modal opens.
+    // Deps are intentionally just [open]: the previous version also depended on
+    // handleKeyDown, so any consumer re-render that changed handleKeyDown's identity
+    // (e.g. an unstable onClose/loading) re-ran this effect and yanked the cursor
+    // back to the first input on every keystroke. The contains() guard is belt-and-
+    // suspenders: even if this ever re-runs, it must never steal focus from a control
+    // the user is already editing inside the dialog.
+    (0, react_1.useEffect)(() => {
+        if (!open)
+            return;
+        const timer = setTimeout(() => {
+            const dialog = dialogRef.current;
+            if (!dialog || dialog.contains(document.activeElement))
+                return;
+            const focusable = dialog.querySelector('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])');
+            focusable?.focus();
+        }, 50);
+        return () => clearTimeout(timer);
+    }, [open]);
     if (!open)
         return null;
     return ((0, jsx_runtime_1.jsx)("div", { ref: overlayRef, className: "fixed inset-0 z-50 flex items-center justify-center bg-black/50", onClick: (e) => {
