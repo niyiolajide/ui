@@ -51,6 +51,17 @@ const cssVars = plugin(({ addBase, addComponents }) => {
         scrollBehavior: 'auto !important',
       },
     },
+    // Mobile grid safety net: any UNPREFIXED multi-column grid (grid-cols-3..6)
+    // degrades to 2 columns below the `sm` breakpoint so pages stay usable on
+    // phones (e.g. inside the Pulse mobile WebViews) even when a page didn't add
+    // responsive prefixes. Responsive variants (sm:/md:/lg:grid-cols-*) generate
+    // distinct classes and are untouched; 7+ col grids (calendars/heatmaps,
+    // 12-col layouts) are intentionally left alone.
+    '@media (max-width: 639px)': {
+      '.grid-cols-3, .grid-cols-4, .grid-cols-5, .grid-cols-6': {
+        gridTemplateColumns: 'repeat(2, minmax(0, 1fr)) !important',
+      },
+    },
   })
 
   addComponents({
