@@ -3,11 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserMenu = exports.AppSwitcher = exports.Sidebar = exports.Topbar = exports.AppShell = exports.ThemeToggle = exports.useTheme = exports.ThemeProvider = exports.PageEmptyState = exports.PageErrorState = exports.SegmentedControl = exports.Pagination = exports.ResponsiveTable = exports.ResponsiveRow = exports.Modal = exports.EmptyState = exports.LoadingSpinner = exports.PageHeader = exports.StatCard = exports.Badge = exports.Input = exports.Card = exports.Button = exports.cn = void 0;
+exports.UserMenu = exports.AppSwitcher = exports.Sidebar = exports.Topbar = exports.AppShell = exports.ThemeToggle = exports.useTheme = exports.ThemeProvider = exports.PageEmptyState = exports.PageErrorState = exports.SegmentedControl = exports.Pagination = exports.ResponsiveTable = exports.ResponsiveRow = exports.Modal = exports.EmptyState = exports.LoadingSpinner = exports.PageHeader = exports.StatCard = exports.Badge = exports.Input = exports.Card = exports.Button = exports.PULSE_THEME_COLOR = exports.pwaViewport = exports.pwaMetadata = exports.cn = void 0;
 // @niyi/ui — shared design-system primitives. Import the Tailwind preset separately
 // (`@niyi/ui/tailwind-preset`) and the base CSS (`@niyi/ui/styles.css`).
 var cn_1 = require("./cn");
 Object.defineProperty(exports, "cn", { enumerable: true, get: function () { return cn_1.cn; } });
+var pwa_1 = require("./pwa");
+Object.defineProperty(exports, "pwaMetadata", { enumerable: true, get: function () { return pwa_1.pwaMetadata; } });
+Object.defineProperty(exports, "pwaViewport", { enumerable: true, get: function () { return pwa_1.pwaViewport; } });
+Object.defineProperty(exports, "PULSE_THEME_COLOR", { enumerable: true, get: function () { return pwa_1.PULSE_THEME_COLOR; } });
 var Button_1 = require("./components/Button");
 Object.defineProperty(exports, "Button", { enumerable: true, get: function () { return __importDefault(Button_1).default; } });
 var Card_1 = require("./components/Card");
