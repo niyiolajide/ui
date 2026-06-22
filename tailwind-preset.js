@@ -142,6 +142,23 @@ const cssVars = plugin(({ addBase, addComponents }) => {
     '.motion-fast': { transitionDuration: 'var(--motion-fast)', transitionTimingFunction: 'var(--motion-ease-standard)' },
     '.motion-base': { transitionDuration: 'var(--motion-base)', transitionTimingFunction: 'var(--motion-ease-standard)' },
     '.motion-slow': { transitionDuration: 'var(--motion-slow)', transitionTimingFunction: 'var(--motion-ease-standard)' },
+
+    // Mobile content-squeeze safety net (apps render at ~360px inside the Pulse WebViews).
+    // Variant A — flex rows: `.responsive-row` stacks vertically on phones and becomes a
+    // justify-between row at `sm`+, so a fixed-width right block (value/controls/badge) never
+    // crushes the left label below the breakpoint. Drop-in for a hand-rolled
+    // `flex items-start justify-between gap-4`. Add `.responsive-row-center` for desktop
+    // vertical-centering. Each direct child should still carry `min-w-0` if it truncates.
+    '.responsive-row': { display: 'flex', flexDirection: 'column', gap: '0.25rem' },
+    '@media (min-width: 640px)': {
+      '.responsive-row': { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem' },
+      '.responsive-row-center': { alignItems: 'center' },
+    },
+    // Variant B — wide tables: `.table-scroll` lets the table scroll horizontally instead of
+    // compressing columns to ~1 char on a phone. The nested table keeps a sensible min width
+    // (override via `--table-min`, e.g. style={{ ['--table-min']: '32rem' }} for narrow tables).
+    '.table-scroll': { overflowX: 'auto', WebkitOverflowScrolling: 'touch' },
+    '.table-scroll > table': { minWidth: 'var(--table-min, 40rem)' },
   })
 })
 
