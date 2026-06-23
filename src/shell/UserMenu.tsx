@@ -13,7 +13,7 @@ export interface ShellUser {
 export default function UserMenu({
   user,
   isAdmin,
-  hubUrl = 'http://localhost:4000',
+  hubUrl = '',
   onSignOut,
 }: {
   user?: ShellUser
@@ -32,7 +32,9 @@ export default function UserMenu({
     return () => document.removeEventListener('mousedown', h)
   }, [])
 
-  const signOut = onSignOut || (() => { window.location.href = `${hubUrl}/login` })
+  // Single-origin SSO: the hub-token is HttpOnly, so sign-out must hit the hub's
+  // GET /logout (same origin) which clears the cookie and redirects to /login.
+  const signOut = onSignOut || (() => { window.location.href = `${hubUrl}/logout` })
   const label = user?.name || user?.email || 'Account'
 
   return (
