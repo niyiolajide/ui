@@ -1,5 +1,6 @@
 export { cn } from './cn';
 export { pwaMetadata, pwaViewport, PULSE_THEME_COLOR, type PwaOptions } from './pwa';
+export { default as BasePathFetch } from './BasePathFetch';
 export { default as Button } from './components/Button';
 export { default as Card } from './components/Card';
 export { default as Input } from './components/Input';

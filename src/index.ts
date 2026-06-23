@@ -2,6 +2,7 @@
 // (`@niyi/ui/tailwind-preset`) and the base CSS (`@niyi/ui/styles.css`).
 export { cn } from './cn'
 export { pwaMetadata, pwaViewport, PULSE_THEME_COLOR, type PwaOptions } from './pwa'
+export { default as BasePathFetch } from './BasePathFetch'
 
 export { default as Button } from './components/Button'
 export { default as Card } from './components/Card'
