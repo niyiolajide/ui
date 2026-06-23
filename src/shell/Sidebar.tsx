@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import * as Icons from 'lucide-react'
 import { cn } from '../cn'
@@ -28,7 +29,9 @@ export default function Sidebar({ groups }: { groups: NavGroup[] }) {
             const Icon = (Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[item.icon || ''] || Icons.Dot
             const active = isActive(item.href)
             return (
-              <a
+              // Next <Link> (not raw <a>) so the app's basePath is auto-prepended
+              // (e.g. /dashboard → /vantage/dashboard); raw hrefs would 404 at the origin root.
+              <Link
                 key={item.href}
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
@@ -41,7 +44,7 @@ export default function Sidebar({ groups }: { groups: NavGroup[] }) {
               >
                 <Icon className="w-4 h-4 shrink-0" />
                 {item.label}
-              </a>
+              </Link>
             )
           })}
         </div>

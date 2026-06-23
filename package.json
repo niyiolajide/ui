@@ -1,6 +1,6 @@
 {
   "name": "@niyi/ui",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Shared design system for the sibling apps: Tailwind preset, base CSS layers, and React primitives.",
   "license": "UNLICENSED",
   "repository": "github:niyiolajide/ui",
