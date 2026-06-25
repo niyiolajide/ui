@@ -17,6 +17,7 @@ export { default as ResponsiveTable } from './components/ResponsiveTable';
 export { Pagination } from './components/Pagination';
 export { SegmentedControl } from './components/SegmentedControl';
 export { PageErrorState, PageEmptyState } from './components/PageState';
+export { default as UsageTracker, trackUsage, type UsageTrackerProps, type UsageNavItem, } from './analytics/UsageTracker';
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';
 export { default as ThemeToggle } from './theme/ThemeToggle';
 export { default as AppShell } from './shell/AppShell';
