@@ -13,7 +13,8 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined)
 
-const STORAGE_KEY = 'theme'
+/** localStorage key for the persisted theme. Shared with ThemeScript (FOUC script). */
+export const STORAGE_KEY = 'theme'
 
 function getSystemTheme(): 'light' | 'dark' {
   if (typeof window === 'undefined') return 'light'

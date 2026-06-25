@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserMenu = exports.AppSwitcher = exports.Sidebar = exports.Topbar = exports.AppShell = exports.ThemeToggle = exports.useTheme = exports.ThemeProvider = exports.trackUsage = exports.UsageTracker = exports.PageEmptyState = exports.PageErrorState = exports.SegmentedControl = exports.Pagination = exports.ResponsiveTable = exports.ResponsiveRow = exports.Modal = exports.EmptyState = exports.useToast = exports.ToastProvider = exports.SkeletonTable = exports.SkeletonStat = exports.SkeletonCard = exports.SkeletonText = exports.Skeleton = exports.LoadingSpinner = exports.PageHeader = exports.StatCard = exports.Badge = exports.Input = exports.Card = exports.Button = exports.BasePathFetch = exports.PULSE_THEME_COLOR = exports.pwaViewport = exports.pwaMetadata = exports.cn = void 0;
+exports.UserMenu = exports.AppSwitcher = exports.Sidebar = exports.Topbar = exports.AppShell = exports.themeScriptSource = exports.ThemeScript = exports.ThemeToggle = exports.THEME_STORAGE_KEY = exports.useTheme = exports.ThemeProvider = exports.trackUsage = exports.UsageTracker = exports.PageEmptyState = exports.PageErrorState = exports.SegmentedControl = exports.Pagination = exports.ResponsiveTable = exports.ResponsiveRow = exports.Modal = exports.EmptyState = exports.useToast = exports.ToastProvider = exports.SkeletonTable = exports.SkeletonStat = exports.SkeletonCard = exports.SkeletonText = exports.Skeleton = exports.LoadingSpinner = exports.PageHeader = exports.StatCard = exports.Badge = exports.Input = exports.Card = exports.Button = exports.BasePathFetch = exports.PULSE_THEME_COLOR = exports.pwaViewport = exports.pwaMetadata = exports.cn = void 0;
 // @niyi/ui — shared design-system primitives. Import the Tailwind preset separately
 // (`@niyi/ui/tailwind-preset`) and the base CSS (`@niyi/ui/styles.css`).
 var cn_1 = require("./cn");
@@ -58,8 +58,12 @@ Object.defineProperty(exports, "trackUsage", { enumerable: true, get: function (
 var ThemeProvider_1 = require("./theme/ThemeProvider");
 Object.defineProperty(exports, "ThemeProvider", { enumerable: true, get: function () { return ThemeProvider_1.ThemeProvider; } });
 Object.defineProperty(exports, "useTheme", { enumerable: true, get: function () { return ThemeProvider_1.useTheme; } });
+Object.defineProperty(exports, "THEME_STORAGE_KEY", { enumerable: true, get: function () { return ThemeProvider_1.STORAGE_KEY; } });
 var ThemeToggle_1 = require("./theme/ThemeToggle");
 Object.defineProperty(exports, "ThemeToggle", { enumerable: true, get: function () { return __importDefault(ThemeToggle_1).default; } });
+var ThemeScript_1 = require("./theme/ThemeScript");
+Object.defineProperty(exports, "ThemeScript", { enumerable: true, get: function () { return __importDefault(ThemeScript_1).default; } });
+Object.defineProperty(exports, "themeScriptSource", { enumerable: true, get: function () { return ThemeScript_1.themeScriptSource; } });
 // Shell (cross-app chrome)
 var AppShell_1 = require("./shell/AppShell");
 Object.defineProperty(exports, "AppShell", { enumerable: true, get: function () { return __importDefault(AppShell_1).default; } });

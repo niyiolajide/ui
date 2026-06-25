@@ -11,6 +11,7 @@ const plugin = require('tailwindcss/plugin')
 const cssVars = plugin(({ addBase, addComponents }) => {
   addBase({
     ':root': {
+      colorScheme: 'light',
       '--motion-fast': '120ms',
       '--motion-base': '180ms',
       '--motion-slow': '260ms',
@@ -21,6 +22,23 @@ const cssVars = plugin(({ addBase, addComponents }) => {
       '--text-primary': '#0A2540',
       '--text-secondary': '#475569',
       '--border-color': '#E3E8EE',
+      // ─── Semantic neutral ramp (dark-mode aware) ──────────────────────────────
+      // Cool slate-like neutrals as RGB triplets (so the `ground` Tailwind color can
+      // take an <alpha-value>). The ramp INVERTS under `.dark` (50↔900 …) so a single
+      // class like `bg-ground-50` / `text-ground-900` reads correctly in both modes
+      // WITHOUT a per-app forked `--*-slate-*` remap. Migrating apps that hand-rolled
+      // an inverted slate ramp should drop it and use `ground-*` (same values).
+      '--ground-50': '248 250 252', '--ground-100': '241 245 249', '--ground-200': '226 232 240',
+      '--ground-300': '203 213 225', '--ground-400': '148 163 184', '--ground-500': '100 116 139',
+      '--ground-600': '71 85 105', '--ground-700': '51 65 85', '--ground-800': '30 41 59',
+      '--ground-900': '15 23 42',
+      // Semantic surface/ink singletons (also flip). Used by the var-backed
+      // `surface` / `ink` / `muted` / `line` / `canvas` Tailwind colors below.
+      '--surface': '#FFFFFF',          // card / raised surface
+      '--surface-muted': '#F6F9FC',    // page / sunken surface
+      '--ink': '#0A2540',              // primary text
+      '--ink-muted': '#475569',        // secondary text
+      '--line': '#E3E8EE',             // borders / dividers
       // Data-viz tokens — single source of truth for charts. Consume via the
       // var-backed `viz` Tailwind colors (stroke-viz-axis / fill-viz-pos / bg-viz-band)
       // for STATIC colors, or as `var(--viz-*)` strings inside `style={{}}` for
@@ -45,12 +63,24 @@ const cssVars = plugin(({ addBase, addComponents }) => {
       '--viz-nodata': 'rgba(148,163,184,0.15)',     // missing-data cells
     },
     '.dark': {
+      colorScheme: 'dark',
       '--bg-primary': '#0A2540',
       '--bg-secondary': '#1E293B',
       '--bg-card': '#1E293B',
       '--text-primary': '#F6F9FC',
       '--text-secondary': '#94A3B8',
       '--border-color': '#334155',
+      // Inverted neutral ramp for dark mode (50↔900, 100↔800 …) — matches the
+      // per-app forked ramp this preset replaces.
+      '--ground-50': '15 23 42', '--ground-100': '30 41 59', '--ground-200': '51 65 85',
+      '--ground-300': '71 85 105', '--ground-400': '100 116 139', '--ground-500': '148 163 184',
+      '--ground-600': '203 213 225', '--ground-700': '226 232 240', '--ground-800': '241 245 249',
+      '--ground-900': '248 250 252',
+      '--surface': '#1E293B',
+      '--surface-muted': '#0A2540',
+      '--ink': '#F6F9FC',
+      '--ink-muted': '#94A3B8',
+      '--line': '#334155',
       // Brightened so charts read on the dark card surface (#1E293B); tooltip flips
       // to a light pill, series ink flips to a light stroke.
       '--viz-1': '#2DD4BF', '--viz-2': '#38BDF8', '--viz-3': '#5EEAD4', '--viz-4': '#4ADE80',
@@ -240,12 +270,54 @@ module.exports = {
           band: 'var(--viz-band)', 'band-strong': 'var(--viz-band-strong)',
           'band-neutral': 'var(--viz-band-neutral)', nodata: 'var(--viz-nodata)',
         },
+        // Dark-mode-aware neutral ramp. RGB triplets (→ <alpha-value> support) that
+        // INVERT under `.dark`, so `bg-ground-50` / `text-ground-900` / `border-ground-200`
+        // read correctly in both modes from ONE class. Replaces per-app forked
+        // `--*-slate-*` ramps. Values defined in the plugin :root/.dark above.
+        ground: {
+          50: 'rgb(var(--ground-50) / <alpha-value>)',
+          100: 'rgb(var(--ground-100) / <alpha-value>)',
+          200: 'rgb(var(--ground-200) / <alpha-value>)',
+          300: 'rgb(var(--ground-300) / <alpha-value>)',
+          400: 'rgb(var(--ground-400) / <alpha-value>)',
+          500: 'rgb(var(--ground-500) / <alpha-value>)',
+          600: 'rgb(var(--ground-600) / <alpha-value>)',
+          700: 'rgb(var(--ground-700) / <alpha-value>)',
+          800: 'rgb(var(--ground-800) / <alpha-value>)',
+          900: 'rgb(var(--ground-900) / <alpha-value>)',
+        },
         // Semantic aliases → CSS variables (set in the plugin :root/.dark). Prefer in new code.
-        canvas: 'var(--bg-secondary)',
-        surface: 'var(--bg-card)',
-        ink: 'var(--text-primary)',
-        muted: 'var(--text-secondary)',
-        line: 'var(--border-color)',
+        // All flip in dark mode. `surface`/`surface-muted` = backgrounds, `ink`/`muted` = text,
+        // `line` = borders. `canvas` kept as an alias for the page background.
+        canvas: 'var(--surface-muted)',
+        surface: {
+          DEFAULT: 'var(--surface)',
+          muted: 'var(--surface-muted)',
+        },
+        ink: {
+          DEFAULT: 'var(--ink)',
+          muted: 'var(--ink-muted)',
+        },
+        muted: 'var(--ink-muted)',
+        line: 'var(--line)',
+        // Chart / data-viz semantic colors → the same var-backed values as `viz` (single
+        // source of truth in :root/.dark), exposed under the `chart` name the external
+        // review asked for. Use `bg-chart-primary` / `text-chart-success` etc. for STATIC
+        // colors; they flip in dark mode automatically. (For data-driven SVG fills, read
+        // the `var(--viz-*)` strings directly — see the viz note above.)
+        chart: {
+          primary: 'var(--viz-1)', secondary: 'var(--viz-2)', tertiary: 'var(--viz-3)',
+          1: 'var(--viz-1)', 2: 'var(--viz-2)', 3: 'var(--viz-3)', 4: 'var(--viz-4)',
+          5: 'var(--viz-5)', 6: 'var(--viz-6)', 7: 'var(--viz-7)', 8: 'var(--viz-8)',
+          grid: 'var(--viz-grid)', axis: 'var(--viz-axis)', line: 'var(--viz-line)',
+          tooltip: 'var(--viz-tooltip-bg)', 'tooltip-fg': 'var(--viz-tooltip-fg)',
+          success: 'var(--viz-pos)', pos: 'var(--viz-pos)',
+          warning: 'var(--viz-warn)', warn: 'var(--viz-warn)',
+          danger: 'var(--viz-neg)', neg: 'var(--viz-neg)',
+          crit: 'var(--viz-crit)', high: 'var(--viz-high)', thresh: 'var(--viz-thresh)',
+          band: 'var(--viz-band)', 'band-strong': 'var(--viz-band-strong)',
+          'band-neutral': 'var(--viz-band-neutral)', nodata: 'var(--viz-nodata)',
+        },
       },
       fontFamily: {
         sans: ['var(--font-body)', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'],

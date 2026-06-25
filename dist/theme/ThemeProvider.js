@@ -2,12 +2,14 @@
 "use strict";
 'use client';
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.STORAGE_KEY = void 0;
 exports.ThemeProvider = ThemeProvider;
 exports.useTheme = useTheme;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
 const ThemeContext = (0, react_1.createContext)(undefined);
-const STORAGE_KEY = 'theme';
+/** localStorage key for the persisted theme. Shared with ThemeScript (FOUC script). */
+exports.STORAGE_KEY = 'theme';
 function getSystemTheme() {
     if (typeof window === 'undefined')
         return 'light';
@@ -24,7 +26,7 @@ function ThemeProvider({ children }) {
     const [resolvedTheme, setResolvedTheme] = (0, react_1.useState)('light');
     // Initialize from localStorage on mount
     (0, react_1.useEffect)(() => {
-        const stored = localStorage.getItem(STORAGE_KEY);
+        const stored = localStorage.getItem(exports.STORAGE_KEY);
         const initial = stored && ['light', 'dark', 'system'].includes(stored) ? stored : 'system';
         setThemeState(initial);
         applyTheme(initial);
@@ -44,7 +46,7 @@ function ThemeProvider({ children }) {
     }, [theme]);
     const setTheme = (0, react_1.useCallback)((newTheme) => {
         setThemeState(newTheme);
-        localStorage.setItem(STORAGE_KEY, newTheme);
+        localStorage.setItem(exports.STORAGE_KEY, newTheme);
         applyTheme(newTheme);
         setResolvedTheme(newTheme === 'system' ? getSystemTheme() : newTheme);
     }, []);

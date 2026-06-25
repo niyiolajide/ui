@@ -28,8 +28,13 @@ export {
   type UsageNavItem,
 } from './analytics/UsageTracker'
 
-export { ThemeProvider, useTheme } from './theme/ThemeProvider'
+export { ThemeProvider, useTheme, STORAGE_KEY as THEME_STORAGE_KEY } from './theme/ThemeProvider'
 export { default as ThemeToggle } from './theme/ThemeToggle'
+export {
+  default as ThemeScript,
+  themeScriptSource,
+  type ThemeScriptProps,
+} from './theme/ThemeScript'
 
 // Shell (cross-app chrome)
 export { default as AppShell } from './shell/AppShell'
