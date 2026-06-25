@@ -218,11 +218,14 @@ module.exports = {
         shake: { '0%, 100%': { transform: 'translateX(0)' }, '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-4px)' }, '20%, 40%, 60%, 80%': { transform: 'translateX(4px)' } },
         fadeUp: { from: { opacity: '0', transform: 'translateY(12px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
         slideDown: { from: { opacity: '0', transform: 'translateY(-8px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+        // Skeleton shimmer: a soft highlight sweeps across the placeholder (Skeleton overlay).
+        shimmer: { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(100%)' } },
       },
       animation: {
         shake: 'shake 0.4s ease-in-out',
         fadeUp: 'fadeUp 0.5s cubic-bezier(0.2,0,0,1) both',
         slideDown: 'slideDown 180ms cubic-bezier(0.2,0,0,1)',
+        shimmer: 'shimmer 1.6s ease-in-out infinite',
       },
     },
   },

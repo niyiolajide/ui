@@ -6,6 +6,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'outline' | 'neutral'
   size?: 'xs' | 'sm' | 'md' | 'lg'
   loading?: boolean
+  /** Replaces the label while `loading` — give it context ("Saving…", "Pulling transactions…"). */
+  loadingLabel?: string
   leftIcon?: LucideIcon
   rightIcon?: LucideIcon
 }
@@ -14,6 +16,7 @@ export default function Button({
   variant = 'primary',
   size = 'md',
   loading = false,
+  loadingLabel,
   leftIcon: LeftIcon,
   rightIcon: RightIcon,
   className,
@@ -59,7 +62,7 @@ export default function Button({
       {loading ? (
         <span className="inline-flex items-center gap-2">
           <span className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-current" role="status" aria-label="Loading" />
-          {children}
+          {loadingLabel ?? children}
         </span>
       ) : (
         <span className="inline-flex items-center gap-2">

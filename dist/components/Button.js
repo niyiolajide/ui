@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Button;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const cn_1 = require("../cn");
-function Button({ variant = 'primary', size = 'md', loading = false, leftIcon: LeftIcon, rightIcon: RightIcon, className, children, disabled, ...props }) {
+function Button({ variant = 'primary', size = 'md', loading = false, loadingLabel, leftIcon: LeftIcon, rightIcon: RightIcon, className, children, disabled, ...props }) {
     const variants = {
         primary: 'btn btn-primary',
         secondary: 'btn btn-secondary',
@@ -24,5 +24,5 @@ function Button({ variant = 'primary', size = 'md', loading = false, leftIcon: L
         md: 'w-4 h-4',
         lg: 'w-5 h-5',
     };
-    return ((0, jsx_runtime_1.jsx)("button", { className: (0, cn_1.cn)(variants[variant], sizes[size], loading && 'opacity-70 cursor-not-allowed', className), disabled: disabled || loading, "aria-busy": loading || undefined, ...props, children: loading ? ((0, jsx_runtime_1.jsxs)("span", { className: "inline-flex items-center gap-2", children: [(0, jsx_runtime_1.jsx)("span", { className: "inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-current", role: "status", "aria-label": "Loading" }), children] })) : ((0, jsx_runtime_1.jsxs)("span", { className: "inline-flex items-center gap-2", children: [LeftIcon && (0, jsx_runtime_1.jsx)(LeftIcon, { className: iconSizes[size] }), children, RightIcon && (0, jsx_runtime_1.jsx)(RightIcon, { className: iconSizes[size] })] })) }));
+    return ((0, jsx_runtime_1.jsx)("button", { className: (0, cn_1.cn)(variants[variant], sizes[size], loading && 'opacity-70 cursor-not-allowed', className), disabled: disabled || loading, "aria-busy": loading || undefined, ...props, children: loading ? ((0, jsx_runtime_1.jsxs)("span", { className: "inline-flex items-center gap-2", children: [(0, jsx_runtime_1.jsx)("span", { className: "inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-current", role: "status", "aria-label": "Loading" }), loadingLabel ?? children] })) : ((0, jsx_runtime_1.jsxs)("span", { className: "inline-flex items-center gap-2", children: [LeftIcon && (0, jsx_runtime_1.jsx)(LeftIcon, { className: iconSizes[size] }), children, RightIcon && (0, jsx_runtime_1.jsx)(RightIcon, { className: iconSizes[size] })] })) }));
 }
