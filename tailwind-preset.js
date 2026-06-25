@@ -21,6 +21,28 @@ const cssVars = plugin(({ addBase, addComponents }) => {
       '--text-primary': '#0A2540',
       '--text-secondary': '#475569',
       '--border-color': '#E3E8EE',
+      // Data-viz tokens — single source of truth for charts. Consume via the
+      // var-backed `viz` Tailwind colors (stroke-viz-axis / fill-viz-pos / bg-viz-band)
+      // for STATIC colors, or as `var(--viz-*)` strings inside `style={{}}` for
+      // DATA-DRIVEN colors. NOTE: `var()` does NOT resolve in raw SVG presentation
+      // attributes (`stroke="..."`) — only in CSS declarations (className/style).
+      '--viz-1': '#0F766E', '--viz-2': '#0EA5E9', '--viz-3': '#14B8A6', '--viz-4': '#22C55E',
+      '--viz-5': '#F59E0B', '--viz-6': '#64748B', '--viz-7': '#DC2626', '--viz-8': '#334155',
+      '--viz-grid': '#F1F5F9',        // faint gridlines
+      '--viz-axis': '#CBD5E1',        // axis / crosshair lines
+      '--viz-line': '#0F172A',        // primary series ink
+      '--viz-tooltip-bg': '#0F172A',  // tooltip pill
+      '--viz-tooltip-fg': '#FFFFFF',
+      '--viz-pos': '#10B981',         // good / in-range
+      '--viz-warn': '#F59E0B',        // low / caution
+      '--viz-neg': '#EF4444',         // high / bad
+      '--viz-crit': '#7F1D1D',        // very-low (clinical, most severe)
+      '--viz-high': '#C2410C',        // very-high (clinical)
+      '--viz-thresh': '#FCD34D',      // dashed threshold lines
+      '--viz-band': 'rgba(16,185,129,0.10)',        // shaded normal/target band
+      '--viz-band-strong': 'rgba(16,185,129,0.35)', // band edge stroke
+      '--viz-band-neutral': 'rgba(15,23,42,0.06)',  // neutral (min–max) band
+      '--viz-nodata': 'rgba(148,163,184,0.15)',     // missing-data cells
     },
     '.dark': {
       '--bg-primary': '#0A2540',
@@ -29,6 +51,25 @@ const cssVars = plugin(({ addBase, addComponents }) => {
       '--text-primary': '#F6F9FC',
       '--text-secondary': '#94A3B8',
       '--border-color': '#334155',
+      // Brightened so charts read on the dark card surface (#1E293B); tooltip flips
+      // to a light pill, series ink flips to a light stroke.
+      '--viz-1': '#2DD4BF', '--viz-2': '#38BDF8', '--viz-3': '#5EEAD4', '--viz-4': '#4ADE80',
+      '--viz-5': '#FBBF24', '--viz-6': '#94A3B8', '--viz-7': '#F87171', '--viz-8': '#CBD5E1',
+      '--viz-grid': '#334155',
+      '--viz-axis': '#475569',
+      '--viz-line': '#E2E8F0',
+      '--viz-tooltip-bg': '#F1F5F9',
+      '--viz-tooltip-fg': '#0A2540',
+      '--viz-pos': '#34D399',
+      '--viz-warn': '#FBBF24',
+      '--viz-neg': '#F87171',
+      '--viz-crit': '#DC2626',
+      '--viz-high': '#FB923C',
+      '--viz-thresh': '#FCD34D',
+      '--viz-band': 'rgba(52,211,153,0.14)',
+      '--viz-band-strong': 'rgba(52,211,153,0.40)',
+      '--viz-band-neutral': 'rgba(226,232,240,0.08)',
+      '--viz-nodata': 'rgba(148,163,184,0.18)',
     },
     '*': { borderColor: '#E3E8EE' },
     '.dark *': { borderColor: '#334155' },
@@ -187,8 +228,17 @@ module.exports = {
           0: '#FFFFFF', 50: '#F6F9FC', 100: '#F1F5F9', 200: '#E3E8EE', 300: '#CBD5E1', 400: '#94A3B8',
           500: '#64748B', 600: '#475569', 700: '#334155', 800: '#1E293B', 900: '#0A2540',
         },
+        // Var-backed so chart utilities (stroke-viz-*, fill-viz-*, bg-viz-*) flip in
+        // dark mode automatically. Values defined in the plugin :root/.dark above.
         viz: {
-          1: '#0F766E', 2: '#0EA5E9', 3: '#14B8A6', 4: '#22C55E', 5: '#F59E0B', 6: '#64748B', 7: '#DC2626', 8: '#334155',
+          1: 'var(--viz-1)', 2: 'var(--viz-2)', 3: 'var(--viz-3)', 4: 'var(--viz-4)',
+          5: 'var(--viz-5)', 6: 'var(--viz-6)', 7: 'var(--viz-7)', 8: 'var(--viz-8)',
+          grid: 'var(--viz-grid)', axis: 'var(--viz-axis)', line: 'var(--viz-line)',
+          tooltip: 'var(--viz-tooltip-bg)', 'tooltip-fg': 'var(--viz-tooltip-fg)',
+          pos: 'var(--viz-pos)', warn: 'var(--viz-warn)', neg: 'var(--viz-neg)',
+          crit: 'var(--viz-crit)', high: 'var(--viz-high)', thresh: 'var(--viz-thresh)',
+          band: 'var(--viz-band)', 'band-strong': 'var(--viz-band-strong)',
+          'band-neutral': 'var(--viz-band-neutral)', nodata: 'var(--viz-nodata)',
         },
         // Semantic aliases → CSS variables (set in the plugin :root/.dark). Prefer in new code.
         canvas: 'var(--bg-secondary)',
