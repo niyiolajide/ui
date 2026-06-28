@@ -1,6 +1,6 @@
 # @niyi/ui
 
-Shared design system for the sibling apps (HealthPulse, Vantage, PropertyPulse, LifeOS, auth-hub).
+Shared design system for the sibling apps (HealthPulse, FinPulse, PropertyPulse, LifeOS, auth-hub).
 One source of truth for tokens, base CSS layers, and React primitives — so the apps look and
 feel like one product family and can't drift.
 

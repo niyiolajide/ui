@@ -30,7 +30,7 @@ export default function Sidebar({ groups }: { groups: NavGroup[] }) {
             const active = isActive(item.href)
             return (
               // Next <Link> (not raw <a>) so the app's basePath is auto-prepended
-              // (e.g. /dashboard → /vantage/dashboard); raw hrefs would 404 at the origin root.
+              // (e.g. /dashboard → /finpulse/dashboard); raw hrefs would 404 at the origin root.
               <Link
                 key={item.href}
                 href={item.href}
