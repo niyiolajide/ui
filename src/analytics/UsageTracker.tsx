@@ -93,7 +93,10 @@ function flush(): void {
   queue = []
   const body = JSON.stringify({ events: batch })
   try {
-    const sent = navigator.sendBeacon(conf.url, new Blob([body], { type: 'application/json' }))
+    // Keep the beacon body safelisted for local cross-port delivery to ControlPlane.
+    // ControlPlane parses JSON from text/plain bodies, and the fetch fallback keeps
+    // application/json for same-origin or CORS-capable targets.
+    const sent = navigator.sendBeacon(conf.url, body)
     if (sent) {
       return
     }
