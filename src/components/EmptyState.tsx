@@ -1,4 +1,4 @@
-import { type LucideIcon, ArrowRight, Inbox } from 'lucide-react'
+import { ArrowRight, type LucideIcon } from 'lucide-react'
 
 interface EmptyStateProps {
   icon?: LucideIcon
@@ -10,7 +10,7 @@ interface EmptyStateProps {
 
 export default function EmptyState({ icon, title, description, actionLabel, actionHref }: EmptyStateProps) {
   const renderIcon = () => {
-    if (!icon) return null
+    if (!icon) {return null}
     const IconComponent = icon
     return (
       <div className="mb-4 flex justify-center">

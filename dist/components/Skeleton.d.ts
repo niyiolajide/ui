@@ -1,4 +1,4 @@
-import { type HTMLAttributes } from 'react';
+import type { HTMLAttributes } from 'react';
 interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
     rounded?: 'sm' | 'md' | 'lg' | 'full';
 }

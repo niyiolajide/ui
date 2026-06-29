@@ -11,6 +11,8 @@ interface PageHeaderProps {
 }
 
 export default function PageHeader({ title, subtitle, breadcrumbs, actions }: PageHeaderProps) {
+  const hasActions = actions !== undefined && actions !== null && actions !== false
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
       <div>
@@ -33,7 +35,7 @@ export default function PageHeader({ title, subtitle, breadcrumbs, actions }: Pa
         <h1 className="page-title">{title}</h1>
         {subtitle && <p className="page-subtitle mt-1">{subtitle}</p>}
       </div>
-      {actions && (
+      {hasActions && (
         <div className="flex items-center gap-2 shrink-0">{actions}</div>
       )}
     </div>

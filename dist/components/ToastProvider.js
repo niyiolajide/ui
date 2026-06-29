@@ -17,27 +17,36 @@ const lucide_react_1 = require("lucide-react");
 const cn_1 = require("../cn");
 const ToastContext = (0, react_1.createContext)(null);
 let _seq = 0;
+function appendToast(setToasts, type, message, opts) {
+    const id = ++_seq;
+    setToasts((list) => [
+        ...list,
+        { id, type, message, action: opts?.action, duration: opts?.duration ?? 4000 },
+    ]);
+}
+function withoutToast(list, id) {
+    return list.filter((t) => t.id !== id);
+}
+function makeDismiss(setToasts) {
+    return (id) => {
+        setToasts((list) => withoutToast(list, id));
+    };
+}
 function ToastProvider({ children }) {
     const [toasts, setToasts] = (0, react_1.useState)([]);
-    const dismiss = (0, react_1.useCallback)((id) => {
-        setToasts((list) => list.filter((t) => t.id !== id));
+    const dismiss = (0, react_1.useMemo)(() => makeDismiss(setToasts), []);
+    const push = (0, react_1.useCallback)((type, message, opts) => {
+        appendToast(setToasts, type, message, opts);
     }, []);
     const api = (0, react_1.useMemo)(() => {
-        const push = (type, message, opts) => {
-            const id = ++_seq;
-            setToasts((list) => [
-                ...list,
-                { id, type, message, action: opts?.action, duration: opts?.duration ?? 4000 },
-            ]);
-        };
         return {
-            toast: (message, opts) => push(opts?.type ?? 'info', message, opts),
-            success: (message, opts) => push('success', message, opts),
-            error: (message, opts) => push('error', message, opts),
-            info: (message, opts) => push('info', message, opts),
+            toast: (message, opts) => { push(opts?.type ?? 'info', message, opts); },
+            success: (message, opts) => { push('success', message, opts); },
+            error: (message, opts) => { push('error', message, opts); },
+            info: (message, opts) => { push('info', message, opts); },
             dismiss,
         };
-    }, [dismiss]);
+    }, [dismiss, push]);
     return ((0, jsx_runtime_1.jsxs)(ToastContext.Provider, { value: api, children: [children, (0, jsx_runtime_1.jsx)("div", { className: "pointer-events-none fixed inset-x-0 bottom-0 z-[60] flex flex-col items-center gap-2 p-4 sm:items-end sm:p-6", role: "region", "aria-label": "Notifications", children: toasts.map((t) => ((0, jsx_runtime_1.jsx)(ToastRow, { toast: t, onDismiss: dismiss }, t.id))) })] }));
 }
 const TONE = {
@@ -47,20 +56,22 @@ const TONE = {
 };
 function ToastRow({ toast, onDismiss }) {
     (0, react_1.useEffect)(() => {
-        if (toast.duration <= 0)
+        if (toast.duration <= 0) {
             return;
-        const timer = setTimeout(() => onDismiss(toast.id), toast.duration);
-        return () => clearTimeout(timer);
+        }
+        const timer = setTimeout(() => { onDismiss(toast.id); }, toast.duration);
+        return () => { clearTimeout(timer); };
     }, [toast.id, toast.duration, onDismiss]);
     const { accent, icon: Icon, iconColor } = TONE[toast.type];
-    return ((0, jsx_runtime_1.jsxs)("div", { role: "status", "aria-live": toast.type === 'error' ? 'assertive' : 'polite', className: (0, cn_1.cn)('pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-lg border border-l-4 border-neutral-200 bg-white p-4 shadow-elevated animate-fadeUp dark:border-neutral-700 dark:bg-neutral-800', accent), children: [(0, jsx_runtime_1.jsx)(Icon, { className: (0, cn_1.cn)('mt-0.5 h-5 w-5 shrink-0', iconColor), strokeWidth: 2 }), (0, jsx_runtime_1.jsxs)("div", { className: "min-w-0 flex-1 pt-0.5", children: [(0, jsx_runtime_1.jsx)("p", { className: "text-sm text-neutral-900 dark:text-neutral-50", children: toast.message }), toast.action && ((0, jsx_runtime_1.jsx)("button", { type: "button", onClick: () => {
-                            toast.action.onClick();
+    return ((0, jsx_runtime_1.jsxs)("div", { role: "status", "aria-live": toast.type === 'error' ? 'assertive' : 'polite', className: (0, cn_1.cn)('pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-lg border border-l-4 border-neutral-200 bg-surface p-4 shadow-elevated animate-fadeUp dark:border-neutral-700', accent), children: [(0, jsx_runtime_1.jsx)(Icon, { className: (0, cn_1.cn)('mt-0.5 h-5 w-5 shrink-0', iconColor), strokeWidth: 2 }), (0, jsx_runtime_1.jsxs)("div", { className: "min-w-0 flex-1 pt-0.5", children: [(0, jsx_runtime_1.jsx)("p", { className: "text-sm text-neutral-900 dark:text-neutral-50", children: toast.message }), toast.action && ((0, jsx_runtime_1.jsx)("button", { type: "button", onClick: () => {
+                            toast.action?.onClick();
                             onDismiss(toast.id);
-                        }, className: "mt-1.5 text-sm font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300", children: toast.action.label }))] }), (0, jsx_runtime_1.jsx)("button", { type: "button", onClick: () => onDismiss(toast.id), "aria-label": "Dismiss", className: "shrink-0 rounded p-0.5 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200", children: (0, jsx_runtime_1.jsx)(lucide_react_1.X, { className: "h-4 w-4" }) })] }));
+                        }, className: "mt-1.5 text-sm font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300", children: toast.action.label }))] }), (0, jsx_runtime_1.jsx)("button", { type: "button", onClick: () => { onDismiss(toast.id); }, "aria-label": "Dismiss", className: "shrink-0 rounded p-0.5 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200", children: (0, jsx_runtime_1.jsx)(lucide_react_1.X, { className: "h-4 w-4" }) })] }));
 }
 function useToast() {
     const ctx = (0, react_1.useContext)(ToastContext);
-    if (!ctx)
+    if (!ctx) {
         throw new Error('useToast must be used within <ToastProvider>');
+    }
     return ctx;
 }

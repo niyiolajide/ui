@@ -23,7 +23,8 @@
     "eslint-config.js"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && node scripts/postbuild.mjs",
+    "lint": "eslint src scripts eslint-config.js eslint.config.mjs tailwind-preset.js --max-warnings=0",
+    "build": "npm run lint && tsc -p tsconfig.build.json && node scripts/postbuild.mjs",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "verify-dist": "npm run build && git diff --exit-code -- dist || (echo 'dist out of sync — run build and commit' && exit 1)"
   },
@@ -32,14 +33,16 @@
     "tailwind-merge": "^2.5.0"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18",
     "lucide-react": ">=0.300.0",
-    "next": ">=14"
+    "next": ">=14",
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "devDependencies": {
+    "@niyi/platform": "github:niyiolajide/platform#3135c15",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "eslint": "^8.57.1",
     "lucide-react": "^0.323.0",
     "next": "^14.1.0",
     "react": "^18.2.0",

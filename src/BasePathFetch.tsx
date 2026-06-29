@@ -17,7 +17,7 @@ interface BasePathFetchProps {
  * URLs, `/_next` (Next handles those), and already-prefixed paths are untouched.
  */
 export default function BasePathFetch({ basePath }: BasePathFetchProps) {
-  if (!basePath) return null
+  if (!basePath) {return null}
   const js =
     `(function(){var b=${JSON.stringify(basePath)};if(window.__bpFetch)return;window.__bpFetch=1;` +
     `var f=window.fetch;window.fetch=function(input,init){try{` +

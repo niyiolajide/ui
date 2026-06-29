@@ -50,7 +50,7 @@ export function PageEmptyState({
   className,
 }: PageEmptyStateProps) {
   return (
-    <div className={cn('rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-8 text-center', className)}>
+    <div className={cn('rounded-lg border border-neutral-200 dark:border-neutral-700 bg-surface p-8 text-center', className)}>
       <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-700">
         <Inbox className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
       </div>

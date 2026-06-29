@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import type { ComponentType } from 'react'
 import * as Icons from 'lucide-react'
 import { cn } from '../cn'
 
@@ -15,6 +16,12 @@ export interface NavGroup {
   items: NavItem[]
 }
 
+const ICONS = Icons as unknown as Record<string, ComponentType<{ className?: string }>>
+
+function iconFor(name: string | undefined): ComponentType<{ className?: string }> {
+  return ICONS[name ?? ''] ?? Icons.Dot
+}
+
 /** Shared left nav. Active state from the current pathname. */
 export default function Sidebar({ groups }: { groups: NavGroup[] }) {
   const pathname = usePathname() || ''
@@ -26,7 +33,7 @@ export default function Sidebar({ groups }: { groups: NavGroup[] }) {
         <div key={gi} className="flex flex-col gap-0.5">
           {g.label && <p className="px-3 pb-1 meta-label">{g.label}</p>}
           {g.items.map((item) => {
-            const Icon = (Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[item.icon || ''] || Icons.Dot
+            const Icon = iconFor(item.icon)
             const active = isActive(item.href)
             return (
               // Next <Link> (not raw <a>) so the app's basePath is auto-prepended

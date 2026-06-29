@@ -16,8 +16,9 @@ const jsx_runtime_1 = require("react/jsx-runtime");
  * URLs, `/_next` (Next handles those), and already-prefixed paths are untouched.
  */
 function BasePathFetch({ basePath }) {
-    if (!basePath)
+    if (!basePath) {
         return null;
+    }
     const js = `(function(){var b=${JSON.stringify(basePath)};if(window.__bpFetch)return;window.__bpFetch=1;` +
         `var f=window.fetch;window.fetch=function(input,init){try{` +
         `if(typeof input==='string'&&(input==='/api'||input.slice(0,5)==='/api/')){input=b+input}` +

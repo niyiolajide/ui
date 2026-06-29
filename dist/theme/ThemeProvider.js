@@ -11,8 +11,9 @@ const ThemeContext = (0, react_1.createContext)(undefined);
 /** localStorage key for the persisted theme. Shared with ThemeScript (FOUC script). */
 exports.STORAGE_KEY = 'theme';
 function getSystemTheme() {
-    if (typeof window === 'undefined')
+    if (typeof window === 'undefined') {
         return 'light';
+    }
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 function applyTheme(theme) {
@@ -42,7 +43,7 @@ function ThemeProvider({ children }) {
             }
         }
         mediaQuery.addEventListener('change', handleChange);
-        return () => mediaQuery.removeEventListener('change', handleChange);
+        return () => { mediaQuery.removeEventListener('change', handleChange); };
     }, [theme]);
     const setTheme = (0, react_1.useCallback)((newTheme) => {
         setThemeState(newTheme);

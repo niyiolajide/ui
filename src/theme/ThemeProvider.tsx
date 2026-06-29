@@ -17,7 +17,7 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined)
 export const STORAGE_KEY = 'theme'
 
 function getSystemTheme(): 'light' | 'dark' {
-  if (typeof window === 'undefined') return 'light'
+  if (typeof window === 'undefined') {return 'light'}
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
@@ -54,7 +54,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
 
     mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
+    return () => { mediaQuery.removeEventListener('change', handleChange); }
   }, [theme])
 
   const setTheme = useCallback((newTheme: Theme) => {

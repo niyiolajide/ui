@@ -1,8 +1,9 @@
+import { type ReactNode } from 'react';
 interface ModalProps {
     open: boolean;
     onClose: () => void;
     title: string;
-    children: React.ReactNode;
+    children: ReactNode;
     confirmLabel?: string;
     confirmVariant?: 'primary' | 'danger';
     onConfirm?: () => void;

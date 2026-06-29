@@ -1,7 +1,7 @@
 import Topbar from './Topbar'
 import Sidebar, { type NavGroup } from './Sidebar'
-import { type AppInfo } from './AppSwitcher'
-import { type ShellUser } from './UserMenu'
+import type { AppInfo } from './AppSwitcher'
+import type { ShellUser } from './UserMenu'
 
 /** The shared application shell: consistent topbar (brand + app switcher + theme
  *  toggle + account menu) and optional left nav, across every app. */

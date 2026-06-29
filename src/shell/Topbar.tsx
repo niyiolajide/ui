@@ -27,7 +27,7 @@ export default function Topbar({
   themeToggle?: boolean
 }) {
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-neutral-200 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/80 px-4 backdrop-blur">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-neutral-200 dark:border-neutral-700 bg-surface px-4 backdrop-blur">
       {left}
       <span className="font-display text-lg leading-none text-neutral-900 dark:text-neutral-50">{appName}</span>
       <div className="ml-auto flex items-center gap-1">

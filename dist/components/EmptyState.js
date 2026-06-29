@@ -5,8 +5,9 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const lucide_react_1 = require("lucide-react");
 function EmptyState({ icon, title, description, actionLabel, actionHref }) {
     const renderIcon = () => {
-        if (!icon)
+        if (!icon) {
             return null;
+        }
         const IconComponent = icon;
         return ((0, jsx_runtime_1.jsx)("div", { className: "mb-4 flex justify-center", children: (0, jsx_runtime_1.jsx)("div", { className: "w-16 h-16 rounded-full bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center", children: (0, jsx_runtime_1.jsx)(IconComponent, { className: "w-8 h-8 text-primary-400", strokeWidth: 1.5 }) }) }));
     };

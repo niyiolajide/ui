@@ -1,8 +1,9 @@
-import { type LucideIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import type { ReactNode } from 'react';
 interface StatCardProps {
-    label: React.ReactNode;
+    label: ReactNode;
     value: string | number;
-    subtitle?: React.ReactNode;
+    subtitle?: ReactNode;
     highlight?: boolean;
     highlightTone?: 'success' | 'warning' | 'neutral';
     icon?: LucideIcon;

@@ -39,12 +39,12 @@ export function SegmentedControl<T extends string>({
           role="tab"
           id={`${id}-tab-${option.value}`}
           aria-selected={value === option.value}
-          onClick={() => onChange(option.value)}
+          onClick={() => { onChange(option.value); }}
           className={`inline-flex items-center gap-1.5 rounded-md font-medium transition-colors ${
             size === 'sm' ? 'px-2.5 py-1 text-xs' : 'px-3.5 py-1.5 text-sm'
           } ${
             value === option.value
-              ? 'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 shadow-sm'
+              ? 'bg-surface text-neutral-900 dark:text-neutral-50 shadow-sm'
               : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
           }`}
         >

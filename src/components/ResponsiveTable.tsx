@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { cn } from '../cn'
 
 interface ResponsiveTableProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -15,7 +16,8 @@ interface ResponsiveTableProps extends React.HTMLAttributes<HTMLDivElement> {
  * Replaces a bare `<table>` (or one only loosely wrapped) at narrow widths.
  */
 export default function ResponsiveTable({ minWidth, className, children, style, ...rest }: ResponsiveTableProps) {
-  const mergedStyle = minWidth ? { ...style, ['--table-min' as string]: minWidth } : style
+  const mergedStyle = minWidth ? ({ ...style, '--table-min': minWidth } as CSSProperties) : style
+
   return (
     <div className={cn('table-scroll', className)} style={mergedStyle} {...rest}>
       {children}

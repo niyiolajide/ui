@@ -41,22 +41,28 @@ const react_1 = require("react");
 const Icons = __importStar(require("lucide-react"));
 const lucide_react_1 = require("lucide-react");
 const cn_1 = require("../cn");
+const ICONS = Icons;
+function iconFor(name) {
+    return ICONS[name ?? ''] ?? Icons.AppWindow;
+}
 /** Cross-app launcher — lists every sibling app from the registry. Present in every shell. */
 function AppSwitcher({ apps, currentKey }) {
     const [open, setOpen] = (0, react_1.useState)(false);
     const ref = (0, react_1.useRef)(null);
     (0, react_1.useEffect)(() => {
         const h = (e) => {
-            if (ref.current && !ref.current.contains(e.target))
+            if (ref.current && !ref.current.contains(e.target)) {
                 setOpen(false);
+            }
         };
         document.addEventListener('mousedown', h);
-        return () => document.removeEventListener('mousedown', h);
+        return () => { document.removeEventListener('mousedown', h); };
     }, []);
-    if (!apps?.length)
+    if (apps.length === 0) {
         return null;
-    return ((0, jsx_runtime_1.jsxs)("div", { ref: ref, className: "relative", children: [(0, jsx_runtime_1.jsx)("button", { onClick: () => setOpen((o) => !o), "aria-label": "Switch app", "aria-expanded": open, className: "p-2 rounded-lg text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors", children: (0, jsx_runtime_1.jsx)(lucide_react_1.LayoutGrid, { className: "w-5 h-5" }) }), open && ((0, jsx_runtime_1.jsxs)("div", { className: "absolute right-0 mt-1 w-64 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 shadow-elevated p-2 z-50", children: [(0, jsx_runtime_1.jsx)("p", { className: "px-2 py-1 meta-label", children: "Apps" }), (0, jsx_runtime_1.jsx)("div", { className: "grid grid-cols-2 gap-1", children: apps.map((a) => {
-                            const Icon = (Icons[a.icon || ''] || Icons.AppWindow);
+    }
+    return ((0, jsx_runtime_1.jsxs)("div", { ref: ref, className: "relative", children: [(0, jsx_runtime_1.jsx)("button", { onClick: () => { setOpen((o) => !o); }, "aria-label": "Switch app", "aria-expanded": open, className: "p-2 rounded-lg text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors", children: (0, jsx_runtime_1.jsx)(lucide_react_1.LayoutGrid, { className: "w-5 h-5" }) }), open && ((0, jsx_runtime_1.jsxs)("div", { className: "absolute right-0 mt-1 w-64 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-surface shadow-elevated p-2 z-50", children: [(0, jsx_runtime_1.jsx)("p", { className: "px-2 py-1 meta-label", children: "Apps" }), (0, jsx_runtime_1.jsx)("div", { className: "grid grid-cols-2 gap-1", children: apps.map((a) => {
+                            const Icon = iconFor(a.icon);
                             const active = a.key === currentKey;
                             return ((0, jsx_runtime_1.jsxs)("a", { href: a.url, className: (0, cn_1.cn)('flex flex-col items-center gap-1.5 rounded-lg p-3 text-center text-xs font-medium transition-colors', active
                                     ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'

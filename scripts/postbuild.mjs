@@ -13,13 +13,13 @@ function walk(dir) {
 
 let count = 0
 for (const src of walk('src')) {
-  if (!/\.tsx?$/.test(src)) continue
+  if (!/\.tsx?$/.test(src)) {continue}
   const head = fs.readFileSync(src, 'utf8').slice(0, 80)
-  if (!/^\s*['"]use client['"]/.test(head)) continue
+  if (!/^\s*['"]use client['"]/.test(head)) {continue}
   const js = src.replace(/^src/, 'dist').replace(/\.tsx?$/, '.js')
-  if (!fs.existsSync(js)) continue
-  let c = fs.readFileSync(js, 'utf8')
-  if (/^['"]use client['"]/.test(c)) continue
+  if (!fs.existsSync(js)) {continue}
+  const c = fs.readFileSync(js, 'utf8')
+  if (/^['"]use client['"]/.test(c)) {continue}
   fs.writeFileSync(js, `'use client';\n${c}`)
   console.log('use client →', js)
   count++

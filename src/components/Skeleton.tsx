@@ -1,4 +1,4 @@
-import { type HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 import { cn } from '../cn'
 
 // Token-ized loading placeholders (SH-1). A neutral base with a soft highlight that

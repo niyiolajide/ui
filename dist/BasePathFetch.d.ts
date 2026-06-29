@@ -1,5 +1,5 @@
 interface BasePathFetchProps {
-    /** The app's Next.js basePath, e.g. "/vantage". No-op when empty. */
+    /** The app's Next.js basePath, e.g. "/finpulse". No-op when empty. */
     basePath: string;
 }
 /**

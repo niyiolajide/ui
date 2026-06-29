@@ -44,16 +44,20 @@ const link_1 = __importDefault(require("next/link"));
 const navigation_1 = require("next/navigation");
 const Icons = __importStar(require("lucide-react"));
 const cn_1 = require("../cn");
+const ICONS = Icons;
+function iconFor(name) {
+    return ICONS[name ?? ''] ?? Icons.Dot;
+}
 /** Shared left nav. Active state from the current pathname. */
 function Sidebar({ groups }) {
     const pathname = (0, navigation_1.usePathname)() || '';
     const isActive = (href) => pathname === href || pathname.startsWith(href + '/');
     return ((0, jsx_runtime_1.jsx)("nav", { className: "flex flex-col gap-5 p-3", children: groups.map((g, gi) => ((0, jsx_runtime_1.jsxs)("div", { className: "flex flex-col gap-0.5", children: [g.label && (0, jsx_runtime_1.jsx)("p", { className: "px-3 pb-1 meta-label", children: g.label }), g.items.map((item) => {
-                    const Icon = Icons[item.icon || ''] || Icons.Dot;
+                    const Icon = iconFor(item.icon);
                     const active = isActive(item.href);
                     return (
                     // Next <Link> (not raw <a>) so the app's basePath is auto-prepended
-                    // (e.g. /dashboard → /vantage/dashboard); raw hrefs would 404 at the origin root.
+                    // (e.g. /dashboard → /finpulse/dashboard); raw hrefs would 404 at the origin root.
                     (0, jsx_runtime_1.jsxs)(link_1.default, { href: item.href, "aria-current": active ? 'page' : undefined, className: (0, cn_1.cn)('flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors', active
                             ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
                             : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-50'), children: [(0, jsx_runtime_1.jsx)(Icon, { className: "w-4 h-4 shrink-0" }), item.label] }, item.href));

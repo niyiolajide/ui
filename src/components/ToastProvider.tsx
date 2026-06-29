@@ -10,6 +10,8 @@
 
 import {
   createContext,
+  type Dispatch,
+  type SetStateAction,
   useCallback,
   useContext,
   useEffect,
@@ -53,29 +55,47 @@ const ToastContext = createContext<ToastApi | null>(null)
 
 let _seq = 0
 
+function appendToast(
+  setToasts: Dispatch<SetStateAction<ToastItem[]>>,
+  type: ToastType,
+  message: string,
+  opts?: ToastOptions,
+): void {
+  const id = ++_seq
+  setToasts((list) => [
+    ...list,
+    { id, type, message, action: opts?.action, duration: opts?.duration ?? 4000 },
+  ])
+}
+
+function withoutToast(list: ToastItem[], id: number): ToastItem[] {
+  return list.filter((t) => t.id !== id)
+}
+
+function makeDismiss(setToasts: Dispatch<SetStateAction<ToastItem[]>>) {
+  return (id: number) => {
+    setToasts((list) => withoutToast(list, id))
+  }
+}
+
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastItem[]>([])
 
-  const dismiss = useCallback((id: number) => {
-    setToasts((list) => list.filter((t) => t.id !== id))
+  const dismiss = useMemo(() => makeDismiss(setToasts), [])
+
+  const push = useCallback((type: ToastType, message: string, opts?: ToastOptions) => {
+    appendToast(setToasts, type, message, opts)
   }, [])
 
   const api = useMemo<ToastApi>(() => {
-    const push = (type: ToastType, message: string, opts?: ToastOptions) => {
-      const id = ++_seq
-      setToasts((list) => [
-        ...list,
-        { id, type, message, action: opts?.action, duration: opts?.duration ?? 4000 },
-      ])
-    }
     return {
-      toast: (message, opts) => push(opts?.type ?? 'info', message, opts),
-      success: (message, opts) => push('success', message, opts),
-      error: (message, opts) => push('error', message, opts),
-      info: (message, opts) => push('info', message, opts),
+      toast: (message, opts) => { push(opts?.type ?? 'info', message, opts); },
+      success: (message, opts) => { push('success', message, opts); },
+      error: (message, opts) => { push('error', message, opts); },
+      info: (message, opts) => { push('info', message, opts); },
       dismiss,
     }
-  }, [dismiss])
+  }, [dismiss, push])
 
   return (
     <ToastContext.Provider value={api}>
@@ -101,9 +121,9 @@ const TONE: Record<ToastType, { accent: string; icon: typeof Info; iconColor: st
 
 function ToastRow({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: number) => void }) {
   useEffect(() => {
-    if (toast.duration <= 0) return
-    const timer = setTimeout(() => onDismiss(toast.id), toast.duration)
-    return () => clearTimeout(timer)
+    if (toast.duration <= 0) {return}
+    const timer = setTimeout(() => { onDismiss(toast.id); }, toast.duration)
+    return () => { clearTimeout(timer); }
   }, [toast.id, toast.duration, onDismiss])
 
   const { accent, icon: Icon, iconColor } = TONE[toast.type]
@@ -113,7 +133,7 @@ function ToastRow({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: numb
       role="status"
       aria-live={toast.type === 'error' ? 'assertive' : 'polite'}
       className={cn(
-        'pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-lg border border-l-4 border-neutral-200 bg-white p-4 shadow-elevated animate-fadeUp dark:border-neutral-700 dark:bg-neutral-800',
+        'pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-lg border border-l-4 border-neutral-200 bg-surface p-4 shadow-elevated animate-fadeUp dark:border-neutral-700',
         accent,
       )}
     >
@@ -124,7 +144,7 @@ function ToastRow({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: numb
           <button
             type="button"
             onClick={() => {
-              toast.action!.onClick()
+              toast.action?.onClick()
               onDismiss(toast.id)
             }}
             className="mt-1.5 text-sm font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
@@ -135,7 +155,7 @@ function ToastRow({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: numb
       </div>
       <button
         type="button"
-        onClick={() => onDismiss(toast.id)}
+        onClick={() => { onDismiss(toast.id); }}
         aria-label="Dismiss"
         className="shrink-0 rounded p-0.5 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
       >
@@ -147,6 +167,6 @@ function ToastRow({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: numb
 
 export function useToast(): ToastApi {
   const ctx = useContext(ToastContext)
-  if (!ctx) throw new Error('useToast must be used within <ToastProvider>')
+  if (!ctx) {throw new Error('useToast must be used within <ToastProvider>')}
   return ctx
 }

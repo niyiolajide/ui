@@ -1,11 +1,12 @@
 /**
- * @niyi/ui/eslint-config — design-system guardrails (prevents the constellation
- * from re-drifting). Extend in each app's .eslintrc:
+ * @niyi/ui/eslint-config — legacy compatibility wrapper for the design-system
+ * guardrails. The shared source of truth now lives in @niyi/platform/eslint/*.
+ * Extend this only from legacy .eslintrc consumers:
  *
  *   { "extends": ["next/core-web-vitals", "@niyi/ui/eslint-config"] }
  *
- * Rules are 'warn' for gradual adoption; escalate to 'error' (and keep ESLint on
- * during `next build`) once each app is clean, to make the build the gate.
+ * Rules are errors to preserve the original guardrail intent under the stricter
+ * platform policy. New flat-config consumers should import @niyi/platform/eslint.
  * For full raw-color/class bans, also add eslint-plugin-tailwindcss
  * (`no-custom-classname`) with the @niyi/ui preset.
  */
@@ -14,7 +15,7 @@ module.exports = {
     // No inline styles for color/layout — use @niyi/ui primitives + Tailwind tokens.
     // (Charts / runtime-computed dimensions are the legitimate exception.)
     'no-restricted-syntax': [
-      'warn',
+      'error',
       {
         selector: "JSXAttribute[name.name='style']",
         message:
@@ -23,7 +24,7 @@ module.exports = {
     ],
     // Don't fork the shared primitives locally.
     'no-restricted-imports': [
-      'warn',
+      'error',
       {
         patterns: [
           {

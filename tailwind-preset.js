@@ -1,3 +1,4 @@
+/* eslint-disable max-lines, max-lines-per-function -- shared Tailwind preset intentionally centralizes design tokens and component layers. */
 /**
  * @niyi/ui — shared Tailwind preset. Single source of truth for design tokens AND
  * the base/component layer (shipped as a Tailwind plugin so it's processed natively
@@ -175,7 +176,7 @@ const cssVars = plugin(({ addBase, addComponents }) => {
       transitionProperty: 'all', transitionDuration: 'var(--motion-base)', transitionTimingFunction: 'var(--motion-ease-standard)',
     },
     '.dark .card': { backgroundColor: '#1E293B', borderColor: '#334155' },
-    '.card-hover:hover': { boxShadow: '0 4px 14px rgba(15,23,42,0.12), 0 2px 6px rgba(15,23,42,0.08)', transform: 'translateY(-0.125rem)' },
+    '.card-hover:hover': { boxShadow: '0 4px 14px rgba(15,23,42,0.12), 0 2px 6px rgba(15,23,42,0.08)' },
 
     // Inputs
     '.input': {

@@ -11,6 +11,6 @@ const cn_1 = require("../cn");
  * Replaces a bare `<table>` (or one only loosely wrapped) at narrow widths.
  */
 function ResponsiveTable({ minWidth, className, children, style, ...rest }) {
-    const mergedStyle = minWidth ? { ...style, ['--table-min']: minWidth } : style;
+    const mergedStyle = minWidth ? { ...style, '--table-min': minWidth } : style;
     return ((0, jsx_runtime_1.jsx)("div", { className: (0, cn_1.cn)('table-scroll', className), style: mergedStyle, ...rest, children: children }));
 }

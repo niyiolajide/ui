@@ -17,18 +17,20 @@ function ulid() {
         t = Math.floor(t / 32);
     }
     const rnd = new Uint8Array(16);
-    globalThis.crypto?.getRandomValues?.(rnd);
+    globalThis.crypto.getRandomValues(rnd);
     let rand = '';
-    for (let i = 0; i < 16; i++)
+    for (let i = 0; i < 16; i++) {
         rand += CROCKFORD[rnd[i] % 32];
+    }
     return time + rand;
 }
 const ID_SEG = /^(\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i;
 function screenKeyFor(pathname, navSorted) {
     const path = pathname.replace(/\/+$/, '') || '/';
     for (const item of navSorted) {
-        if (path === item.href || path.startsWith(item.href + '/'))
+        if (path === item.href || path.startsWith(item.href + '/')) {
             return item.key;
+        }
     }
     const redacted = path
         .split('/')
@@ -58,16 +60,16 @@ let lastScreen = null;
 let lastEnteredAt = 0;
 let conf = { app: '', surface: 'web', url: '/api/usage', enabled: true };
 function flush() {
-    if (!conf.enabled || queue.length === 0 || typeof navigator === 'undefined')
+    if (!conf.enabled || queue.length === 0 || typeof navigator === 'undefined') {
         return;
+    }
     const batch = queue;
     queue = [];
     const body = JSON.stringify({ events: batch });
     try {
-        if (navigator.sendBeacon) {
-            const ok = navigator.sendBeacon(conf.url, new Blob([body], { type: 'application/json' }));
-            if (ok)
-                return;
+        const sent = navigator.sendBeacon(conf.url, new Blob([body], { type: 'application/json' }));
+        if (sent) {
+            return;
         }
         void fetch(conf.url, {
             method: 'POST',
@@ -83,8 +85,9 @@ function flush() {
 }
 /** Record an in-screen action for the current screen. Safe to call from any client code. */
 function trackUsage(action, meta) {
-    if (!conf.enabled || !lastScreen)
+    if (!conf.enabled || !lastScreen) {
         return;
+    }
     queue.push({
         id: ulid(),
         ts: new Date().toISOString(),
@@ -103,12 +106,14 @@ function UsageTracker({ app, nav, surface = 'web', ingestPath = '/api/usage', en
         conf = { app, surface, url: ingestUrl(ingestPath), enabled };
     }, [app, surface, ingestPath, enabled]);
     (0, react_1.useEffect)(() => {
-        if (!enabled || !pathname)
+        if (!enabled || !pathname) {
             return;
+        }
         const navSorted = [...(nav ?? [])].sort((a, b) => b.href.length - a.href.length);
         const screenKey = screenKeyFor(pathname, navSorted);
-        if (lastScreen === screenKey)
-            return; // skip query-param-only changes
+        if (lastScreen === screenKey) {
+            return;
+        } // skip query-param-only changes
         const now = Date.now();
         const event = {
             id: ulid(),
@@ -126,13 +131,13 @@ function UsageTracker({ app, nav, surface = 'web', ingestPath = '/api/usage', en
         lastScreen = screenKey;
         lastEnteredAt = now;
         flush();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pathname, enabled]);
+    }, [pathname, enabled, nav, app, surface]);
     (0, react_1.useEffect)(() => {
-        if (!enabled)
+        if (!enabled) {
             return;
+        }
         const iv = setInterval(flush, FLUSH_INTERVAL_MS);
-        const onHide = () => flush();
+        const onHide = () => { flush(); };
         document.addEventListener('visibilitychange', onHide);
         window.addEventListener('pagehide', onHide);
         return () => {

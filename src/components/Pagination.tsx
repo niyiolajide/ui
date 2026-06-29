@@ -19,7 +19,7 @@ export function Pagination({
   onPageChange,
   className = '',
 }: PaginationProps) {
-  if (totalItems === 0) return null
+  if (totalItems === 0) {return null}
 
   const start = (currentPage - 1) * pageSize + 1
   const end = Math.min(currentPage * pageSize, totalItems)
@@ -32,7 +32,7 @@ export function Pagination({
       {totalPages > 1 && (
         <div className="flex items-center gap-1">
           <button
-            onClick={() => onPageChange(currentPage - 1)}
+            onClick={() => { onPageChange(currentPage - 1); }}
             disabled={currentPage <= 1}
             aria-label={`Previous page (page ${currentPage - 1} of ${totalPages})`}
             className="p-1.5 rounded-md text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 focus-visible:outline-none transition-colors"
@@ -43,7 +43,7 @@ export function Pagination({
             {currentPage} / {totalPages}
           </span>
           <button
-            onClick={() => onPageChange(currentPage + 1)}
+            onClick={() => { onPageChange(currentPage + 1); }}
             disabled={currentPage >= totalPages}
             aria-label={`Next page (page ${currentPage + 1} of ${totalPages})`}
             className="p-1.5 rounded-md text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 focus-visible:outline-none transition-colors"

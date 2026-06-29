@@ -57,9 +57,11 @@ function ulid(): string {
     t = Math.floor(t / 32)
   }
   const rnd = new Uint8Array(16)
-  globalThis.crypto?.getRandomValues?.(rnd)
+  globalThis.crypto.getRandomValues(rnd)
   let rand = ''
-  for (let i = 0; i < 16; i++) rand += CROCKFORD[rnd[i] % 32]
+  for (let i = 0; i < 16; i++) {
+    rand += CROCKFORD[rnd[i] % 32]
+  }
   return time + rand
 }
 
@@ -68,7 +70,7 @@ const ID_SEG = /^(\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{1
 function screenKeyFor(pathname: string, navSorted: UsageNavItem[]): string {
   const path = pathname.replace(/\/+$/, '') || '/'
   for (const item of navSorted) {
-    if (path === item.href || path.startsWith(item.href + '/')) return item.key
+    if (path === item.href || path.startsWith(item.href + '/')) {return item.key}
   }
   const redacted = path
     .split('/')
@@ -100,14 +102,14 @@ let lastEnteredAt = 0
 let conf = { app: '', surface: 'web' as UsageEvent['surface'], url: '/api/usage', enabled: true }
 
 function flush(): void {
-  if (!conf.enabled || queue.length === 0 || typeof navigator === 'undefined') return
+  if (!conf.enabled || queue.length === 0 || typeof navigator === 'undefined') {return}
   const batch = queue
   queue = []
   const body = JSON.stringify({ events: batch })
   try {
-    if (navigator.sendBeacon) {
-      const ok = navigator.sendBeacon(conf.url, new Blob([body], { type: 'application/json' }))
-      if (ok) return
+    const sent = navigator.sendBeacon(conf.url, new Blob([body], { type: 'application/json' }))
+    if (sent) {
+      return
     }
     void fetch(conf.url, {
       method: 'POST',
@@ -123,7 +125,7 @@ function flush(): void {
 
 /** Record an in-screen action for the current screen. Safe to call from any client code. */
 export function trackUsage(action: string, meta?: Record<string, unknown>): void {
-  if (!conf.enabled || !lastScreen) return
+  if (!conf.enabled || !lastScreen) {return}
   queue.push({
     id: ulid(),
     ts: new Date().toISOString(),
@@ -151,10 +153,10 @@ export default function UsageTracker({
   }, [app, surface, ingestPath, enabled])
 
   useEffect(() => {
-    if (!enabled || !pathname) return
+    if (!enabled || !pathname) {return}
     const navSorted = [...(nav ?? [])].sort((a, b) => b.href.length - a.href.length)
     const screenKey = screenKeyFor(pathname, navSorted)
-    if (lastScreen === screenKey) return // skip query-param-only changes
+    if (lastScreen === screenKey) {return} // skip query-param-only changes
     const now = Date.now()
     const event: UsageEvent = {
       id: ulid(),
@@ -172,13 +174,12 @@ export default function UsageTracker({
     lastScreen = screenKey
     lastEnteredAt = now
     flush()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, enabled])
+  }, [pathname, enabled, nav, app, surface])
 
   useEffect(() => {
-    if (!enabled) return
+    if (!enabled) {return}
     const iv = setInterval(flush, FLUSH_INTERVAL_MS)
-    const onHide = () => flush()
+    const onHide = () => { flush(); }
     document.addEventListener('visibilitychange', onHide)
     window.addEventListener('pagehide', onHide)
     return () => {
