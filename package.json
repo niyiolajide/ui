@@ -1,6 +1,6 @@
 {
   "name": "@niyi/ui",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "Shared design system for the sibling apps: Tailwind preset, base CSS layers, and React primitives.",
   "license": "UNLICENSED",
   "repository": "github:niyiolajide/ui",
@@ -25,6 +25,7 @@
   "scripts": {
     "lint": "eslint src scripts eslint-config.js eslint.config.mjs tailwind-preset.js --max-warnings=0",
     "build": "npm run lint && tsc -p tsconfig.build.json && node scripts/postbuild.mjs",
+    "test:usage": "npm run build && node scripts/test-usage-ingest-url.mjs",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "verify-dist": "npm run build && git diff --exit-code -- dist || (echo 'dist out of sync — run build and commit' && exit 1)"
   },

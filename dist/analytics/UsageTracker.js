@@ -6,6 +6,7 @@ exports.trackUsage = trackUsage;
 exports.default = UsageTracker;
 const react_1 = require("react");
 const navigation_1 = require("next/navigation");
+const usageIngestUrl_1 = require("./usageIngestUrl");
 const FLUSH_INTERVAL_MS = 10000;
 // ── browser-safe ULID (Crockford base32: 48-bit time + 80-bit randomness) ─────
 const CROCKFORD = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
@@ -38,21 +39,6 @@ function screenKeyFor(pathname, navSorted) {
         .map((seg) => (ID_SEG.test(seg) ? ':id' : seg))
         .join('/');
     return redacted || 'root';
-}
-/**
- * Absolute same-origin ingest URL. We resolve against window.location.origin so the
- * URL does NOT begin with "/api" — otherwise @niyi/ui's BasePathFetch fetch-patch
- * would rewrite a relative "/api/usage" to "/<basePath>/api/usage" and miss the
- * root-mounted ControlPlane ingest. (sendBeacon isn't patched, but the fetch
- * fallback would be; an absolute URL is correct for both.)
- */
-function ingestUrl(ingestPath) {
-    try {
-        return new URL(ingestPath, window.location.origin).toString();
-    }
-    catch {
-        return ingestPath;
-    }
 }
 // ── module-level batch queue (shared by the component + trackUsage) ───────────
 let queue = [];
@@ -99,11 +85,11 @@ function trackUsage(action, meta) {
         ...(meta ? { meta } : {}),
     });
 }
-function UsageTracker({ app, nav, surface = 'web', ingestPath = '/api/usage', enabled = true, }) {
+function UsageTracker({ app, nav, surface = 'web', ingestPath, enabled = true, }) {
     const pathname = (0, navigation_1.usePathname)();
     // Keep module config in sync (trackUsage + flush read it).
     (0, react_1.useEffect)(() => {
-        conf = { app, surface, url: ingestUrl(ingestPath), enabled };
+        conf = { app, surface, url: (0, usageIngestUrl_1.resolveUsageIngestUrl)(ingestPath), enabled };
     }, [app, surface, ingestPath, enabled]);
     (0, react_1.useEffect)(() => {
         if (!enabled || !pathname) {

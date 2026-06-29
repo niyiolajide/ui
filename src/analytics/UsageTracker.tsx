@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import { resolveUsageIngestUrl } from './usageIngestUrl'
 
 // ── Usage / journey analytics capture (shared across all Pulse apps) ──────────
 // Mount ONCE per app (root or authed layout). Auto-emits a `view` event on every
@@ -80,21 +81,6 @@ function screenKeyFor(pathname: string, navSorted: UsageNavItem[]): string {
   return redacted || 'root'
 }
 
-/**
- * Absolute same-origin ingest URL. We resolve against window.location.origin so the
- * URL does NOT begin with "/api" — otherwise @niyi/ui's BasePathFetch fetch-patch
- * would rewrite a relative "/api/usage" to "/<basePath>/api/usage" and miss the
- * root-mounted ControlPlane ingest. (sendBeacon isn't patched, but the fetch
- * fallback would be; an absolute URL is correct for both.)
- */
-function ingestUrl(ingestPath: string): string {
-  try {
-    return new URL(ingestPath, window.location.origin).toString()
-  } catch {
-    return ingestPath
-  }
-}
-
 // ── module-level batch queue (shared by the component + trackUsage) ───────────
 let queue: UsageEvent[] = []
 let lastScreen: string | null = null
@@ -142,14 +128,14 @@ export default function UsageTracker({
   app,
   nav,
   surface = 'web',
-  ingestPath = '/api/usage',
+  ingestPath,
   enabled = true,
 }: UsageTrackerProps) {
   const pathname = usePathname()
 
   // Keep module config in sync (trackUsage + flush read it).
   useEffect(() => {
-    conf = { app, surface, url: ingestUrl(ingestPath), enabled }
+    conf = { app, surface, url: resolveUsageIngestUrl(ingestPath), enabled }
   }, [app, surface, ingestPath, enabled])
 
   useEffect(() => {
