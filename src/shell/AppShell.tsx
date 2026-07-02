@@ -1,5 +1,6 @@
 import Topbar from './Topbar'
 import Sidebar, { type NavGroup } from './Sidebar'
+import Breadcrumbs, { type BreadcrumbItem } from './Breadcrumbs'
 import type { AppInfo } from './AppSwitcher'
 import type { ShellUser } from './UserMenu'
 
@@ -13,6 +14,8 @@ export default function AppShell({
   isAdmin,
   hubUrl,
   nav,
+  topbarLeft,
+  breadcrumbs,
   actions,
   themeToggle = true,
   children,
@@ -24,13 +27,17 @@ export default function AppShell({
   isAdmin?: boolean
   hubUrl?: string
   nav?: NavGroup[]
+  /** Forwarded to Topbar's left slot (e.g. a mobile nav trigger), before the brand. */
+  topbarLeft?: React.ReactNode
+  /** Optional breadcrumb trail rendered above the page content. */
+  breadcrumbs?: BreadcrumbItem[]
   actions?: React.ReactNode
   themeToggle?: boolean
   children: React.ReactNode
 }) {
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
-      <Topbar appName={appName} apps={apps} currentKey={currentKey} user={user} isAdmin={isAdmin} hubUrl={hubUrl} actions={actions} themeToggle={themeToggle} />
+      <Topbar appName={appName} apps={apps} currentKey={currentKey} user={user} isAdmin={isAdmin} hubUrl={hubUrl} left={topbarLeft} actions={actions} themeToggle={themeToggle} />
       <div className="mx-auto flex w-full max-w-[1400px]">
         {nav && nav.length > 0 && (
           <aside className="hidden w-60 shrink-0 border-r border-neutral-200 dark:border-neutral-700 md:block">
@@ -39,7 +46,10 @@ export default function AppShell({
             </div>
           </aside>
         )}
-        <main className="min-w-0 flex-1 px-4 py-6 sm:px-6">{children}</main>
+        <main className="min-w-0 flex-1 px-4 py-6 sm:px-6">
+          {breadcrumbs && breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
+          {children}
+        </main>
       </div>
     </div>
   )
