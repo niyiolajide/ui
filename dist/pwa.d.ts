@@ -6,6 +6,13 @@ export interface PwaOptions {
     title?: string;
     /** iOS status-bar style in standalone. Default 'default'. */
     statusBarStyle?: 'default' | 'black' | 'black-translucent';
+    /**
+     * The app's Next `basePath` (e.g. '/lifepulse'). Next does NOT prefix
+     * metadata icon URLs with basePath, so without this the icon links point at
+     * the origin root — the hub's copies on the shared origin, 404s on direct
+     * port access. Pass it so each app serves its own `public/` icons.
+     */
+    basePath?: string;
 }
 /**
  * Shared PWA `<head>` metadata for every Pulse app — single source of truth.
@@ -21,6 +28,6 @@ export interface PwaOptions {
  *
  * Pair with `pwaViewport()` in the segment's `export const viewport`.
  */
-export declare function pwaMetadata({ title, statusBarStyle }?: PwaOptions): Metadata;
+export declare function pwaMetadata({ title, statusBarStyle, basePath }?: PwaOptions): Metadata;
 /** Shared PWA viewport (theme-color). Spread into a segment's `export const viewport`. */
 export declare function pwaViewport(themeColor?: string): Viewport;

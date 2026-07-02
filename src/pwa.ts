@@ -8,6 +8,13 @@ export interface PwaOptions {
   title?: string
   /** iOS status-bar style in standalone. Default 'default'. */
   statusBarStyle?: 'default' | 'black' | 'black-translucent'
+  /**
+   * The app's Next `basePath` (e.g. '/lifepulse'). Next does NOT prefix
+   * metadata icon URLs with basePath, so without this the icon links point at
+   * the origin root — the hub's copies on the shared origin, 404s on direct
+   * port access. Pass it so each app serves its own `public/` icons.
+   */
+  basePath?: string
 }
 
 /**
@@ -24,16 +31,17 @@ export interface PwaOptions {
  *
  * Pair with `pwaViewport()` in the segment's `export const viewport`.
  */
-export function pwaMetadata({ title = 'Pulse', statusBarStyle = 'default' }: PwaOptions = {}): Metadata {
+export function pwaMetadata({ title = 'Pulse', statusBarStyle = 'default', basePath = '' }: PwaOptions = {}): Metadata {
+  const prefix = basePath === '/' ? '' : basePath
   return {
     applicationName: title,
     appleWebApp: { capable: true, title, statusBarStyle },
     icons: {
       icon: [
-        { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-        { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+        { url: `${prefix}/icon-192.png`, sizes: '192x192', type: 'image/png' },
+        { url: `${prefix}/icon-512.png`, sizes: '512x512', type: 'image/png' },
       ],
-      apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+      apple: [{ url: `${prefix}/apple-touch-icon.png`, sizes: '180x180', type: 'image/png' }],
     },
   }
 }

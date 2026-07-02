@@ -19,16 +19,17 @@ exports.PULSE_THEME_COLOR = '#0F766E';
  *
  * Pair with `pwaViewport()` in the segment's `export const viewport`.
  */
-function pwaMetadata({ title = 'Pulse', statusBarStyle = 'default' } = {}) {
+function pwaMetadata({ title = 'Pulse', statusBarStyle = 'default', basePath = '' } = {}) {
+    const prefix = basePath === '/' ? '' : basePath;
     return {
         applicationName: title,
         appleWebApp: { capable: true, title, statusBarStyle },
         icons: {
             icon: [
-                { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-                { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+                { url: `${prefix}/icon-192.png`, sizes: '192x192', type: 'image/png' },
+                { url: `${prefix}/icon-512.png`, sizes: '512x512', type: 'image/png' },
             ],
-            apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+            apple: [{ url: `${prefix}/apple-touch-icon.png`, sizes: '180x180', type: 'image/png' }],
         },
     };
 }
