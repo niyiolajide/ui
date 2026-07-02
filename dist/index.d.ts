@@ -16,6 +16,8 @@ export { default as ResponsiveRow } from './components/ResponsiveRow';
 export { default as ResponsiveTable } from './components/ResponsiveTable';
 export { Pagination } from './components/Pagination';
 export { SegmentedControl } from './components/SegmentedControl';
+export { Tabs } from './components/Tabs';
+export type { TabItem } from './components/Tabs';
 export { PageErrorState, PageEmptyState } from './components/PageState';
 export { default as UsageTracker, trackUsage, type UsageTrackerProps, type UsageNavItem, } from './analytics/UsageTracker';
 export { ThemeProvider, useTheme, STORAGE_KEY as THEME_STORAGE_KEY } from './theme/ThemeProvider';
