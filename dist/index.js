@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserMenu = exports.AppSwitcher = exports.Sidebar = exports.Topbar = exports.AppShell = exports.themeScriptSource = exports.ThemeScript = exports.ThemeToggle = exports.THEME_STORAGE_KEY = exports.useTheme = exports.ThemeProvider = exports.trackUsage = exports.UsageTracker = exports.PageEmptyState = exports.PageErrorState = exports.Tabs = exports.SegmentedControl = exports.Pagination = exports.ResponsiveTable = exports.ResponsiveRow = exports.Modal = exports.EmptyState = exports.useToast = exports.ToastProvider = exports.SkeletonTable = exports.SkeletonStat = exports.SkeletonCard = exports.SkeletonText = exports.Skeleton = exports.LoadingSpinner = exports.PageHeader = exports.StatCard = exports.Badge = exports.Input = exports.Card = exports.Button = exports.BasePathFetch = exports.PULSE_THEME_COLOR = exports.pwaViewport = exports.pwaMetadata = exports.cn = void 0;
+exports.UserMenu = exports.AppSwitcher = exports.Sidebar = exports.Topbar = exports.AppShell = exports.themeScriptSource = exports.ThemeScript = exports.ThemeToggle = exports.THEME_STORAGE_KEY = exports.useTheme = exports.ThemeProvider = exports.trackUsage = exports.UsageTracker = exports.PageEmptyState = exports.PageErrorState = exports.rangeToDays = exports.DEFAULT_RANGES = exports.RangeSelector = exports.Tabs = exports.SegmentedControl = exports.Pagination = exports.ResponsiveTable = exports.ResponsiveRow = exports.Modal = exports.EmptyState = exports.useToast = exports.ToastProvider = exports.SkeletonTable = exports.SkeletonStat = exports.SkeletonCard = exports.SkeletonText = exports.Skeleton = exports.LoadingSpinner = exports.PageHeader = exports.StatCard = exports.Badge = exports.Input = exports.Card = exports.Button = exports.BasePathFetch = exports.PULSE_THEME_COLOR = exports.pwaViewport = exports.pwaMetadata = exports.cn = void 0;
 // @niyi/ui — shared design-system primitives. Import the Tailwind preset separately
 // (`@niyi/ui/tailwind-preset`) and the base CSS (`@niyi/ui/styles.css`).
 var cn_1 = require("./cn");
@@ -51,6 +51,10 @@ var SegmentedControl_1 = require("./components/SegmentedControl");
 Object.defineProperty(exports, "SegmentedControl", { enumerable: true, get: function () { return SegmentedControl_1.SegmentedControl; } });
 var Tabs_1 = require("./components/Tabs");
 Object.defineProperty(exports, "Tabs", { enumerable: true, get: function () { return Tabs_1.Tabs; } });
+var RangeSelector_1 = require("./components/RangeSelector");
+Object.defineProperty(exports, "RangeSelector", { enumerable: true, get: function () { return RangeSelector_1.RangeSelector; } });
+Object.defineProperty(exports, "DEFAULT_RANGES", { enumerable: true, get: function () { return RangeSelector_1.DEFAULT_RANGES; } });
+Object.defineProperty(exports, "rangeToDays", { enumerable: true, get: function () { return RangeSelector_1.rangeToDays; } });
 var PageState_1 = require("./components/PageState");
 Object.defineProperty(exports, "PageErrorState", { enumerable: true, get: function () { return PageState_1.PageErrorState; } });
 Object.defineProperty(exports, "PageEmptyState", { enumerable: true, get: function () { return PageState_1.PageEmptyState; } });

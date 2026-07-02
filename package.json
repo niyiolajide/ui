@@ -29,7 +29,8 @@
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "verify-dist": "npm run build && git diff --exit-code -- dist || (echo 'dist out of sync — run build and commit' && exit 1)",
     "test:tabs": "npm run build && node scripts/test-tabs-render.mjs",
-    "test:sidebar": "npm run build && node scripts/test-sidebar-render.mjs"
+    "test:sidebar": "npm run build && node scripts/test-sidebar-render.mjs",
+    "test:rangeselector": "npm run build && node scripts/test-rangeselector-render.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.0",
