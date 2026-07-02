@@ -16,6 +16,8 @@ export { default as ResponsiveRow } from './components/ResponsiveRow';
 export { default as ResponsiveTable } from './components/ResponsiveTable';
 export { Pagination } from './components/Pagination';
 export { SegmentedControl } from './components/SegmentedControl';
+export { CommandPalette } from './components/CommandPalette';
+export type { PaletteCommand, PaletteApp, PaletteAppNavItem } from './components/CommandPalette.hooks';
 export { Tabs } from './components/Tabs';
 export type { TabItem } from './components/Tabs';
 export { RangeSelector, DEFAULT_RANGES, rangeToDays } from './components/RangeSelector';
@@ -28,5 +30,6 @@ export { default as ThemeScript, themeScriptSource, type ThemeScriptProps, } fro
 export { default as AppShell } from './shell/AppShell';
 export { default as Topbar } from './shell/Topbar';
 export { default as Sidebar, type NavGroup, type NavItem } from './shell/Sidebar';
+export { default as Breadcrumbs, type BreadcrumbItem } from './shell/Breadcrumbs';
 export { default as AppSwitcher, type AppInfo } from './shell/AppSwitcher';
 export { default as UserMenu, type ShellUser } from './shell/UserMenu';

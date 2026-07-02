@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserMenu = exports.AppSwitcher = exports.Sidebar = exports.Topbar = exports.AppShell = exports.themeScriptSource = exports.ThemeScript = exports.ThemeToggle = exports.THEME_STORAGE_KEY = exports.useTheme = exports.ThemeProvider = exports.trackUsage = exports.UsageTracker = exports.PageEmptyState = exports.PageErrorState = exports.rangeToDays = exports.DEFAULT_RANGES = exports.RangeSelector = exports.Tabs = exports.SegmentedControl = exports.Pagination = exports.ResponsiveTable = exports.ResponsiveRow = exports.Modal = exports.EmptyState = exports.useToast = exports.ToastProvider = exports.SkeletonTable = exports.SkeletonStat = exports.SkeletonCard = exports.SkeletonText = exports.Skeleton = exports.LoadingSpinner = exports.PageHeader = exports.StatCard = exports.Badge = exports.Input = exports.Card = exports.Button = exports.BasePathFetch = exports.PULSE_THEME_COLOR = exports.pwaViewport = exports.pwaMetadata = exports.cn = void 0;
+exports.UserMenu = exports.AppSwitcher = exports.Breadcrumbs = exports.Sidebar = exports.Topbar = exports.AppShell = exports.themeScriptSource = exports.ThemeScript = exports.ThemeToggle = exports.THEME_STORAGE_KEY = exports.useTheme = exports.ThemeProvider = exports.trackUsage = exports.UsageTracker = exports.PageEmptyState = exports.PageErrorState = exports.rangeToDays = exports.DEFAULT_RANGES = exports.RangeSelector = exports.Tabs = exports.CommandPalette = exports.SegmentedControl = exports.Pagination = exports.ResponsiveTable = exports.ResponsiveRow = exports.Modal = exports.EmptyState = exports.useToast = exports.ToastProvider = exports.SkeletonTable = exports.SkeletonStat = exports.SkeletonCard = exports.SkeletonText = exports.Skeleton = exports.LoadingSpinner = exports.PageHeader = exports.StatCard = exports.Badge = exports.Input = exports.Card = exports.Button = exports.BasePathFetch = exports.PULSE_THEME_COLOR = exports.pwaViewport = exports.pwaMetadata = exports.cn = void 0;
 // @niyi/ui — shared design-system primitives. Import the Tailwind preset separately
 // (`@niyi/ui/tailwind-preset`) and the base CSS (`@niyi/ui/styles.css`).
 var cn_1 = require("./cn");
@@ -49,6 +49,8 @@ var Pagination_1 = require("./components/Pagination");
 Object.defineProperty(exports, "Pagination", { enumerable: true, get: function () { return Pagination_1.Pagination; } });
 var SegmentedControl_1 = require("./components/SegmentedControl");
 Object.defineProperty(exports, "SegmentedControl", { enumerable: true, get: function () { return SegmentedControl_1.SegmentedControl; } });
+var CommandPalette_1 = require("./components/CommandPalette");
+Object.defineProperty(exports, "CommandPalette", { enumerable: true, get: function () { return CommandPalette_1.CommandPalette; } });
 var Tabs_1 = require("./components/Tabs");
 Object.defineProperty(exports, "Tabs", { enumerable: true, get: function () { return Tabs_1.Tabs; } });
 var RangeSelector_1 = require("./components/RangeSelector");
@@ -77,6 +79,8 @@ var Topbar_1 = require("./shell/Topbar");
 Object.defineProperty(exports, "Topbar", { enumerable: true, get: function () { return __importDefault(Topbar_1).default; } });
 var Sidebar_1 = require("./shell/Sidebar");
 Object.defineProperty(exports, "Sidebar", { enumerable: true, get: function () { return __importDefault(Sidebar_1).default; } });
+var Breadcrumbs_1 = require("./shell/Breadcrumbs");
+Object.defineProperty(exports, "Breadcrumbs", { enumerable: true, get: function () { return __importDefault(Breadcrumbs_1).default; } });
 var AppSwitcher_1 = require("./shell/AppSwitcher");
 Object.defineProperty(exports, "AppSwitcher", { enumerable: true, get: function () { return __importDefault(AppSwitcher_1).default; } });
 var UserMenu_1 = require("./shell/UserMenu");
