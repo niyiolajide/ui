@@ -40,7 +40,7 @@
     "react-dom": ">=18"
   },
   "devDependencies": {
-    "@niyi/platform": "github:niyiolajide/platform#3135c15",
+    "@niyi/platform": "github:niyiolajide/platform#d9aadb08592dc76e6e66cd031da7c5e37d6e3f1c",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "eslint": "^8.57.1",
