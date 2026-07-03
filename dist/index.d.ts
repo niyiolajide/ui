@@ -33,3 +33,4 @@ export { default as Sidebar, type NavGroup, type NavItem } from './shell/Sidebar
 export { default as Breadcrumbs, type BreadcrumbItem } from './shell/Breadcrumbs';
 export { default as AppSwitcher, type AppInfo } from './shell/AppSwitcher';
 export { default as UserMenu, type ShellUser } from './shell/UserMenu';
+export { default as ReportButton } from './shell/ReportButton';

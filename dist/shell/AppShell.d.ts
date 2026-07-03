@@ -4,7 +4,7 @@ import type { AppInfo } from './AppSwitcher';
 import type { ShellUser } from './UserMenu';
 /** The shared application shell: consistent topbar (brand + app switcher + theme
  *  toggle + account menu) and optional left nav, across every app. */
-export default function AppShell({ appName, apps, currentKey, user, isAdmin, hubUrl, nav, topbarLeft, breadcrumbs, actions, themeToggle, children, }: {
+export default function AppShell({ appName, apps, currentKey, user, isAdmin, hubUrl, nav, topbarLeft, breadcrumbs, actions, themeToggle, report, children, }: {
     appName: string;
     apps: AppInfo[];
     currentKey?: string;
@@ -18,5 +18,7 @@ export default function AppShell({ appName, apps, currentKey, user, isAdmin, hub
     breadcrumbs?: BreadcrumbItem[];
     actions?: React.ReactNode;
     themeToggle?: boolean;
+    /** Show the shared cross-app Report button in the topbar. Defaults to on. */
+    report?: boolean;
     children: React.ReactNode;
 }): import("react").JSX.Element;

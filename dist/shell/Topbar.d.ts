@@ -1,7 +1,7 @@
 import { type AppInfo } from './AppSwitcher';
 import { type ShellUser } from './UserMenu';
 /** Shared top bar: brand + app switcher + theme toggle + account menu. */
-export default function Topbar({ appName, apps, currentKey, user, isAdmin, hubUrl, left, actions, themeToggle, }: {
+export default function Topbar({ appName, apps, currentKey, user, isAdmin, hubUrl, left, actions, themeToggle, report, }: {
     appName: string;
     apps: AppInfo[];
     currentKey?: string;
@@ -13,4 +13,7 @@ export default function Topbar({ appName, apps, currentKey, user, isAdmin, hubUr
     actions?: React.ReactNode;
     /** Show the light/dark toggle. Set false for apps that don't yet support dark mode. */
     themeToggle?: boolean;
+    /** Show the shared cross-app Report button. Set false for apps that have not yet
+     *  wired their same-origin `/api/report-issue` route. Defaults to on. */
+    report?: boolean;
 }): import("react").JSX.Element;
