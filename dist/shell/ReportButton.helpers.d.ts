@@ -23,9 +23,14 @@ export declare function attachScreenshot({ setBusy, setScreenshot, setStatus }: 
     setScreenshot: (value: string | null) => void;
     setStatus: (value: string) => void;
 }): Promise<void>;
-export declare function submitReport({ description, endpoint, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type }: {
+export interface FiledResult {
+    taskId: string;
+    hasGroomingQuestions: boolean;
+}
+export declare function submitReport({ description, endpoint, onFiled, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type }: {
     description: string;
     endpoint?: string;
+    onFiled: (result: FiledResult) => void;
     pageContext: PageContext;
     screenshot: string | null;
     setBusy: (value: boolean) => void;

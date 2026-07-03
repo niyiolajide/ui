@@ -25,11 +25,13 @@ function ReportButton({ appName, pageTitle = '', endpoint, }) {
     const [screenshot, setScreenshot] = (0, react_1.useState)(null);
     const [status, setStatus] = (0, react_1.useState)('');
     const [busy, setBusy] = (0, react_1.useState)(false);
+    const [filed, setFiled] = (0, react_1.useState)(null);
     const pageContext = usePageContext(appName, pageTitle);
-    const actions = useReportActions({ description, endpoint, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type });
-    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(Button_1.default, { type: "button", variant: "ghost", size: "sm", leftIcon: lucide_react_1.Bug, onClick: () => { setOpen(true); }, children: "Report" }), open && ((0, jsx_runtime_1.jsx)(ReportPanel, { busy: busy, description: description, onAttach: actions.attachScreenshot, onClose: () => { if (!busy) {
+    const onFiled = (result) => { setOpen(false); setFiled(result); };
+    const actions = useReportActions({ description, endpoint, onFiled, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type });
+    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(Button_1.default, { type: "button", variant: "ghost", size: "sm", leftIcon: lucide_react_1.Bug, onClick: () => { setOpen(true); setStatus(''); }, children: "Report" }), open && ((0, jsx_runtime_1.jsx)(ReportPanel, { busy: busy, description: description, onAttach: actions.attachScreenshot, onClose: () => { if (!busy) {
                     setOpen(false);
-                } }, onDescription: setDescription, onSubmit: actions.submit, onType: setType, pageContext: pageContext, screenshot: screenshot, status: status, type: type }))] }));
+                } }, onDescription: setDescription, onSubmit: actions.submit, onType: setType, pageContext: pageContext, screenshot: screenshot, status: status, type: type })), filed !== null && (0, jsx_runtime_1.jsx)(FiledToast, { result: filed, onDismiss: () => { setFiled(null); } })] }));
 }
 function usePageContext(appName, pageTitle) {
     const initialContext = (0, react_1.useMemo)(() => (0, ReportButton_helpers_1.serverPageContext)(appName, pageTitle), [appName, pageTitle]);
@@ -37,11 +39,21 @@ function usePageContext(appName, pageTitle) {
     (0, react_1.useEffect)(() => { setPageContext((0, ReportButton_helpers_1.currentPageContext)(appName, pageTitle)); }, [appName, pageTitle]);
     return pageContext;
 }
-function useReportActions({ description, endpoint, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type, }) {
+function useReportActions({ description, endpoint, onFiled, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type, }) {
     return {
         attachScreenshot: () => { void (0, ReportButton_helpers_1.attachScreenshot)({ setBusy, setScreenshot, setStatus }); },
-        submit: () => { void (0, ReportButton_helpers_1.submitReport)({ description, endpoint, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type }); },
+        submit: () => { void (0, ReportButton_helpers_1.submitReport)({ description, endpoint, onFiled, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type }); },
     };
+}
+function FiledToast({ result, onDismiss }) {
+    (0, react_1.useEffect)(() => {
+        const timer = setTimeout(onDismiss, 6000);
+        return () => { clearTimeout(timer); };
+    }, [onDismiss]);
+    if (typeof document === 'undefined') {
+        return null;
+    }
+    return (0, react_dom_1.createPortal)((0, jsx_runtime_1.jsxs)("div", { role: "status", className: "fixed bottom-6 right-6 z-[110] flex max-w-sm items-start gap-3 rounded-lg border border-primary-500 bg-surface px-4 py-3 shadow-2xl", children: [(0, jsx_runtime_1.jsx)(lucide_react_1.CheckCircle2, { className: "mt-0.5 h-5 w-5 shrink-0 text-primary-600" }), (0, jsx_runtime_1.jsxs)("div", { className: "text-sm", children: [(0, jsx_runtime_1.jsxs)("p", { className: "font-semibold text-ink", children: ["Report filed \u2014 ", result.taskId] }), (0, jsx_runtime_1.jsx)("p", { className: "text-xs text-muted", children: result.hasGroomingQuestions ? 'Filed with grooming questions for the agent.' : 'Thanks — your report was filed as a task.' })] }), (0, jsx_runtime_1.jsx)("button", { type: "button", "aria-label": "Dismiss", onClick: onDismiss, className: "ml-1 rounded-md p-0.5 text-muted transition hover:text-ink", children: (0, jsx_runtime_1.jsx)(lucide_react_1.X, { className: "h-4 w-4" }) })] }), document.body);
 }
 function ReportPanel({ busy, description, onAttach, onClose, onDescription, onSubmit, onType, pageContext, screenshot, status, type, }) {
     const { pos, dragHandlers } = (0, ReportButton_drag_1.useDrag)();

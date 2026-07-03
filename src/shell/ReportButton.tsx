@@ -2,13 +2,14 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { AlertTriangle, Bug, Camera, GripHorizontal, Lightbulb, Minus, Send, Square, X, type LucideIcon } from 'lucide-react'
+import { AlertTriangle, Bug, Camera, CheckCircle2, GripHorizontal, Lightbulb, Minus, Send, Square, X, type LucideIcon } from 'lucide-react'
 import Button from '../components/Button'
 import {
   attachScreenshot,
   currentPageContext,
   serverPageContext,
   submitReport,
+  type FiledResult,
   type PageContext,
   type ReportType,
 } from './ReportButton.helpers'
@@ -38,12 +39,14 @@ export default function ReportButton({
   const [screenshot, setScreenshot] = useState<string | null>(null)
   const [status, setStatus] = useState('')
   const [busy, setBusy] = useState(false)
+  const [filed, setFiled] = useState<FiledResult | null>(null)
   const pageContext = usePageContext(appName, pageTitle)
-  const actions = useReportActions({ description, endpoint, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type })
+  const onFiled = (result: FiledResult) => { setOpen(false); setFiled(result); }
+  const actions = useReportActions({ description, endpoint, onFiled, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type })
 
   return (
     <>
-      <Button type="button" variant="ghost" size="sm" leftIcon={Bug} onClick={() => { setOpen(true); }}>
+      <Button type="button" variant="ghost" size="sm" leftIcon={Bug} onClick={() => { setOpen(true); setStatus(''); }}>
         Report
       </Button>
       {open && (
@@ -61,6 +64,7 @@ export default function ReportButton({
           type={type}
         />
       )}
+      {filed !== null && <FiledToast result={filed} onDismiss={() => { setFiled(null); }} />}
     </>
   )
 }
@@ -73,10 +77,11 @@ function usePageContext(appName: string, pageTitle: string): PageContext {
 }
 
 function useReportActions({
-  description, endpoint, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type,
+  description, endpoint, onFiled, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type,
 }: {
   description: string
   endpoint?: string
+  onFiled: (result: FiledResult) => void
   pageContext: PageContext
   screenshot: string | null
   setBusy: (value: boolean) => void
@@ -87,8 +92,29 @@ function useReportActions({
 }) {
   return {
     attachScreenshot: () => { void attachScreenshot({ setBusy, setScreenshot, setStatus }); },
-    submit: () => { void submitReport({ description, endpoint, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type }); },
+    submit: () => { void submitReport({ description, endpoint, onFiled, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type }); },
   }
+}
+
+function FiledToast({ result, onDismiss }: { result: FiledResult; onDismiss: () => void }) {
+  useEffect(() => {
+    const timer = setTimeout(onDismiss, 6000)
+    return () => { clearTimeout(timer); }
+  }, [onDismiss])
+  if (typeof document === 'undefined') { return null }
+  return createPortal(
+    <div role="status" className="fixed bottom-6 right-6 z-[110] flex max-w-sm items-start gap-3 rounded-lg border border-primary-500 bg-surface px-4 py-3 shadow-2xl">
+      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary-600" />
+      <div className="text-sm">
+        <p className="font-semibold text-ink">Report filed — {result.taskId}</p>
+        <p className="text-xs text-muted">{result.hasGroomingQuestions ? 'Filed with grooming questions for the agent.' : 'Thanks — your report was filed as a task.'}</p>
+      </div>
+      <button type="button" aria-label="Dismiss" onClick={onDismiss} className="ml-1 rounded-md p-0.5 text-muted transition hover:text-ink">
+        <X className="h-4 w-4" />
+      </button>
+    </div>,
+    document.body,
+  )
 }
 
 function ReportPanel({

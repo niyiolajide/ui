@@ -117,16 +117,18 @@ export async function attachScreenshot({ setBusy, setScreenshot, setStatus }: { 
   }
 }
 
-export async function submitReport({ description, endpoint, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type }: { description: string; endpoint?: string; pageContext: PageContext; screenshot: string | null; setBusy: (value: boolean) => void; setDescription: (value: string) => void; setScreenshot: (value: string | null) => void; setStatus: (value: string) => void; type: ReportType }) {
+export interface FiledResult { taskId: string; hasGroomingQuestions: boolean }
+
+export async function submitReport({ description, endpoint, onFiled, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type }: { description: string; endpoint?: string; onFiled: (result: FiledResult) => void; pageContext: PageContext; screenshot: string | null; setBusy: (value: boolean) => void; setDescription: (value: string) => void; setScreenshot: (value: string | null) => void; setStatus: (value: string) => void; type: ReportType }) {
   const trimmed = description.trim()
   if (trimmed.length < 3) {
     setStatus('Add a short description.')
     return
   }
   setBusy(true)
-  setStatus('')
+  setStatus('Filing…')
   try {
-    await postReport({ description: trimmed, endpoint, pageContext, screenshot, type, setDescription, setScreenshot, setStatus })
+    await postReport({ description: trimmed, endpoint, onFiled, pageContext, screenshot, type, setDescription, setScreenshot, setStatus })
   } catch {
     setStatus('Report failed.')
   } finally {
@@ -134,7 +136,7 @@ export async function submitReport({ description, endpoint, pageContext, screens
   }
 }
 
-async function postReport({ description, endpoint, pageContext, screenshot, setDescription, setScreenshot, setStatus, type }: { description: string; endpoint?: string; pageContext: PageContext; screenshot: string | null; setDescription: (value: string) => void; setScreenshot: (value: string | null) => void; setStatus: (value: string) => void; type: ReportType }) {
+async function postReport({ description, endpoint, onFiled, pageContext, screenshot, setDescription, setScreenshot, setStatus, type }: { description: string; endpoint?: string; onFiled: (result: FiledResult) => void; pageContext: PageContext; screenshot: string | null; setDescription: (value: string) => void; setScreenshot: (value: string | null) => void; setStatus: (value: string) => void; type: ReportType }) {
   const response = await fetch(reportEndpoint(endpoint), { body: JSON.stringify({ description, page: pageContext, screenshotDataUrl: screenshot ?? undefined, type, userAgent: navigator.userAgent }), headers: { 'content-type': 'application/json' }, method: 'POST' })
   if (!response.ok) {
     setStatus('Report failed.')
@@ -143,7 +145,10 @@ async function postReport({ description, endpoint, pageContext, screenshot, setD
   const data = await response.json() as ReportResponse
   const taskId = data.task?.taskId ?? 'task'
   const questions = data.grooming?.clarifyingQuestions ?? []
-  setStatus(questions.length > 0 ? `${taskId} filed with grooming questions.` : `${taskId} filed.`)
+  // Success: clear the form and hand the filed task to the caller, which closes
+  // the panel and shows a standalone success toast.
+  setStatus('')
   setDescription('')
   setScreenshot(null)
+  onFiled({ taskId, hasGroomingQuestions: questions.length > 0 })
 }
