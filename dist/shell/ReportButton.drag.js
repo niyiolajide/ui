@@ -14,6 +14,12 @@ function useDrag() {
     const [pos, setPos] = (0, react_1.useState)(null);
     const offset = (0, react_1.useRef)(null);
     const onPointerDown = (0, react_1.useCallback)((event) => {
+        // Don't start a drag when the press lands on a control (minimize/close) in
+        // the header — let that button receive its click instead.
+        const target = event.target;
+        if (target instanceof Element && target.closest('button') !== null) {
+            return;
+        }
         const panel = event.currentTarget.closest('[data-report-panel]');
         if (panel === null) {
             return;
