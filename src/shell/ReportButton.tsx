@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { AlertTriangle, Bug, Camera, Lightbulb, Send, type LucideIcon } from 'lucide-react'
+import { createPortal } from 'react-dom'
+import { AlertTriangle, Bug, Camera, GripHorizontal, Lightbulb, Minus, Send, Square, X, type LucideIcon } from 'lucide-react'
 import Button from '../components/Button'
-import Modal from '../components/Modal'
 import {
   attachScreenshot,
   currentPageContext,
@@ -12,12 +12,13 @@ import {
   type PageContext,
   type ReportType,
 } from './ReportButton.helpers'
+import { useDrag } from './ReportButton.drag'
 
 // Shared cross-app issue/enhancement reporter. Rendered by Topbar on every app so
-// it appears on every screen. POSTs to a same-origin `/api/report-issue` route,
-// which each app implements (the hub files directly; sibling apps forward the
-// user's pulse-token to the hub). Lifted from controlplane IssueReportButton
-// (TASK-0471) into @niyi/ui under TASK-0516 so it is no longer ControlPlane-only.
+// it appears on every screen. The dialog is a DRAGGABLE, non-dimming floating
+// panel (grab the header, move it anywhere) so the reporter can uncover whatever
+// they want to screenshot — it never blocks or dims the page. POSTs to a
+// basePath-aware same-origin /api/report-issue (see ReportButton.helpers).
 
 export default function ReportButton({
   appName,
@@ -45,20 +46,21 @@ export default function ReportButton({
       <Button type="button" variant="ghost" size="sm" leftIcon={Bug} onClick={() => { setOpen(true); }}>
         Report
       </Button>
-      <ReportDialog
-        busy={busy}
-        description={description}
-        onAttach={actions.attachScreenshot}
-        onClose={() => { if (!busy) { setOpen(false); } }}
-        onDescription={setDescription}
-        onSubmit={actions.submit}
-        onType={setType}
-        open={open}
-        pageContext={pageContext}
-        screenshot={screenshot}
-        status={status}
-        type={type}
-      />
+      {open && (
+        <ReportPanel
+          busy={busy}
+          description={description}
+          onAttach={actions.attachScreenshot}
+          onClose={() => { if (!busy) { setOpen(false); } }}
+          onDescription={setDescription}
+          onSubmit={actions.submit}
+          onType={setType}
+          pageContext={pageContext}
+          screenshot={screenshot}
+          status={status}
+          type={type}
+        />
+      )}
     </>
   )
 }
@@ -71,15 +73,7 @@ function usePageContext(appName: string, pageTitle: string): PageContext {
 }
 
 function useReportActions({
-  description,
-  endpoint,
-  pageContext,
-  screenshot,
-  setBusy,
-  setDescription,
-  setScreenshot,
-  setStatus,
-  type,
+  description, endpoint, pageContext, screenshot, setBusy, setDescription, setScreenshot, setStatus, type,
 }: {
   description: string
   endpoint?: string
@@ -97,19 +91,8 @@ function useReportActions({
   }
 }
 
-function ReportDialog({
-  busy,
-  description,
-  onAttach,
-  onClose,
-  onDescription,
-  onSubmit,
-  onType,
-  open,
-  pageContext,
-  screenshot,
-  status,
-  type,
+function ReportPanel({
+  busy, description, onAttach, onClose, onDescription, onSubmit, onType, pageContext, screenshot, status, type,
 }: {
   busy: boolean
   description: string
@@ -118,25 +101,51 @@ function ReportDialog({
   onDescription: (value: string) => void
   onSubmit: () => void
   onType: (value: ReportType) => void
-  open: boolean
   pageContext: PageContext
   screenshot: string | null
   status: string
   type: ReportType
 }) {
-  return (
-    <Modal open={open} onClose={onClose} title="Report Page" loading={busy}>
-      <div className="space-y-4 text-sm">
-        <div className="grid grid-cols-2 gap-2">
-          <ReportTypeButton active={type === 'bug'} icon={AlertTriangle} label="Issue" onClick={() => { onType('bug'); }} />
-          <ReportTypeButton active={type === 'enhancement'} icon={Lightbulb} label="Enhancement" onClick={() => { onType('enhancement'); }} />
+  const { pos, dragHandlers } = useDrag()
+  const [minimized, setMinimized] = useState(false)
+  if (typeof document === 'undefined') { return null }
+  const style: React.CSSProperties = pos !== null ? { left: pos.x, top: pos.y } : { top: '4.5rem', right: '1.5rem' }
+
+  return createPortal(
+    <div data-report-panel className="fixed z-[100] w-[min(92vw,26rem)] overflow-hidden rounded-lg border border-line bg-surface shadow-2xl" style={style} role="dialog" aria-label="Report page">
+      <div {...dragHandlers} className="flex cursor-move items-center justify-between gap-2 select-none border-b border-line bg-surface-muted px-3 py-2 touch-none">
+        <span className="flex items-center gap-2 text-sm font-semibold text-ink">
+          <GripHorizontal className="h-4 w-4 text-muted" />
+          Report Page
+        </span>
+        <div className="flex items-center gap-1">
+          <IconButton icon={minimized ? Square : Minus} label={minimized ? 'Expand' : 'Minimize'} onClick={() => { setMinimized((value) => !value); }} />
+          <IconButton icon={X} label="Close" onClick={onClose} disabled={busy} />
         </div>
-        <ReportDetails value={description} onChange={onDescription} />
-        <ReportPageContext pageContext={pageContext} />
-        <ReportActions busy={busy} canSubmit={description.trim().length >= 3} hasScreenshot={screenshot !== null} onAttach={onAttach} onSubmit={onSubmit} />
-        {status.length > 0 && <p className="text-xs text-muted">{status}</p>}
       </div>
-    </Modal>
+      {!minimized && (
+        <div className="space-y-4 p-4 text-sm">
+          <p className="text-xs text-muted">Drag the header to move this panel aside — the page stays visible so you can point at what you&apos;re reporting.</p>
+          <div className="grid grid-cols-2 gap-2">
+            <ReportTypeButton active={type === 'bug'} icon={AlertTriangle} label="Issue" onClick={() => { onType('bug'); }} />
+            <ReportTypeButton active={type === 'enhancement'} icon={Lightbulb} label="Enhancement" onClick={() => { onType('enhancement'); }} />
+          </div>
+          <ReportDetails value={description} onChange={onDescription} />
+          <ReportPageContext pageContext={pageContext} />
+          <ReportActions busy={busy} canSubmit={description.trim().length >= 3} hasScreenshot={screenshot !== null} onAttach={onAttach} onSubmit={onSubmit} />
+          {status.length > 0 && <p className="text-xs text-muted">{status}</p>}
+        </div>
+      )}
+    </div>,
+    document.body,
+  )
+}
+
+function IconButton({ icon: Icon, label, onClick, disabled }: { icon: LucideIcon; label: string; onClick: () => void; disabled?: boolean }) {
+  return (
+    <button type="button" aria-label={label} title={label} onClick={onClick} disabled={disabled} className="rounded-md p-1 text-muted transition hover:bg-surface hover:text-ink disabled:opacity-50">
+      <Icon className="h-4 w-4" />
+    </button>
   )
 }
 
