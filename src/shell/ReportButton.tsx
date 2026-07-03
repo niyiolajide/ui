@@ -22,12 +22,13 @@ import {
 export default function ReportButton({
   appName,
   pageTitle = '',
-  endpoint = '/api/report-issue',
+  endpoint,
 }: {
   appName: string
   /** Optional human page title included with the report. Defaults to the document title at submit time. */
   pageTitle?: string
-  /** Same-origin route the report is POSTed to. Every app exposes `/api/report-issue`. */
+  /** Override the report endpoint. Defaults to a basePath-aware same-origin
+   *  `/api/report-issue` resolved at submit time (see reportEndpoint). */
   endpoint?: string
 }) {
   const [open, setOpen] = useState(false)
@@ -81,7 +82,7 @@ function useReportActions({
   type,
 }: {
   description: string
-  endpoint: string
+  endpoint?: string
   pageContext: PageContext
   screenshot: string | null
   setBusy: (value: boolean) => void

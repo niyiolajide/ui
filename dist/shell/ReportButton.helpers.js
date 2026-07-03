@@ -5,6 +5,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.currentPageContext = currentPageContext;
 exports.serverPageContext = serverPageContext;
+exports.reportEndpoint = reportEndpoint;
 exports.attachScreenshot = attachScreenshot;
 exports.submitReport = submitReport;
 function currentPageContext(appName, pageTitle) {
@@ -19,6 +20,42 @@ function currentPageContext(appName, pageTitle) {
 }
 function serverPageContext(appName, pageTitle) {
     return { appName, codePath: 'unknown', pathname: 'unknown', title: pageTitle, url: '' };
+}
+/**
+ * Resolve the same-origin report endpoint as an ABSOLUTE URL that already
+ * includes the app's Next.js basePath. Every app namespaces its routes under a
+ * basePath (e.g. `/finpulse`), so `/api/report-issue` alone 404s. Next only
+ * *sometimes* auto-prefixes basePath onto a client `fetch('/…')`, so we cannot
+ * rely on it — instead we read the basePath off a `/_next/` asset URL (always
+ * served under basePath) and build the full URL ourselves. An absolute URL is
+ * returned so Next's fetch patch cannot double-prefix it.
+ */
+function reportEndpoint(explicit) {
+    if (explicit !== undefined && explicit.length > 0) {
+        return explicit;
+    }
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return '/api/report-issue';
+    }
+    const basePath = detectBasePath();
+    return new URL(`${basePath}/api/report-issue`, window.location.origin).href;
+}
+function detectBasePath() {
+    const script = document.querySelector('script[src*="/_next/"]');
+    const link = document.querySelector('link[href*="/_next/"]');
+    const ref = script?.src ?? link?.href;
+    if (ref === undefined || ref.length === 0) {
+        return '';
+    }
+    try {
+        const marker = '/_next/';
+        const pathname = new URL(ref, window.location.origin).pathname;
+        const idx = pathname.indexOf(marker);
+        return idx > 0 ? pathname.slice(0, idx) : '';
+    }
+    catch {
+        return '';
+    }
 }
 function inferCodePath(pathname) {
     const clean = pathname.replace(/^\/+|\/+$/g, '');
@@ -95,7 +132,7 @@ async function submitReport({ description, endpoint, pageContext, screenshot, se
     }
 }
 async function postReport({ description, endpoint, pageContext, screenshot, setDescription, setScreenshot, setStatus, type }) {
-    const response = await fetch(endpoint, { body: JSON.stringify({ description, page: pageContext, screenshotDataUrl: screenshot ?? undefined, type, userAgent: navigator.userAgent }), headers: { 'content-type': 'application/json' }, method: 'POST' });
+    const response = await fetch(reportEndpoint(endpoint), { body: JSON.stringify({ description, page: pageContext, screenshotDataUrl: screenshot ?? undefined, type, userAgent: navigator.userAgent }), headers: { 'content-type': 'application/json' }, method: 'POST' });
     if (!response.ok) {
         setStatus('Report failed.');
         return;

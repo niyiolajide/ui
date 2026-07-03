@@ -17,7 +17,7 @@ const ReportButton_helpers_1 = require("./ReportButton.helpers");
 // which each app implements (the hub files directly; sibling apps forward the
 // user's pulse-token to the hub). Lifted from controlplane IssueReportButton
 // (TASK-0471) into @niyi/ui under TASK-0516 so it is no longer ControlPlane-only.
-function ReportButton({ appName, pageTitle = '', endpoint = '/api/report-issue', }) {
+function ReportButton({ appName, pageTitle = '', endpoint, }) {
     const [open, setOpen] = (0, react_1.useState)(false);
     const [type, setType] = (0, react_1.useState)('bug');
     const [description, setDescription] = (0, react_1.useState)('');
