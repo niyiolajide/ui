@@ -9,5 +9,5 @@ interface ModalProps {
     onConfirm?: () => void;
     loading?: boolean;
 }
-export default function Modal({ open, onClose, title, children, confirmLabel, confirmVariant, onConfirm, loading, }: ModalProps): import("react").JSX.Element | null;
+export default function Modal({ open, onClose, title, children, confirmLabel, confirmVariant, onConfirm, loading, }: ModalProps): import("react").ReactPortal | null;
 export {};

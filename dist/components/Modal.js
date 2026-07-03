@@ -8,6 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Modal;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
+const react_dom_1 = require("react-dom");
 const Button_1 = __importDefault(require("./Button"));
 const FOCUSABLE_SELECTOR = [
     'button:not([disabled])',
@@ -89,12 +90,18 @@ function Modal({ open, onClose, title, children, confirmLabel, confirmVariant = 
     useBodyScrollLock(open);
     useModalKeyboard({ open, loading, onClose, dialogRef });
     useInitialModalFocus(open, dialogRef);
-    if (!open) {
+    // Portal to <body>: the shared Topbar uses `backdrop-blur`, and a backdrop-filter
+    // makes that element the containing block for `position: fixed` descendants. When the
+    // Modal renders inline inside the Topbar's actions slot (e.g. the Report button), a
+    // non-portaled `fixed inset-0` resolves to the ~56px topbar instead of the viewport, so
+    // `items-center` centers the dialog off the top of the screen (TASK-0499/0515 cut-off).
+    // Rendering into document.body escapes the transformed/blurred ancestor entirely.
+    if (!open || typeof document === 'undefined') {
         return null;
     }
-    return ((0, jsx_runtime_1.jsx)("div", { ref: overlayRef, className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-900/50", onClick: (e) => {
+    return (0, react_dom_1.createPortal)((0, jsx_runtime_1.jsx)("div", { ref: overlayRef, className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-900/50", onClick: (e) => {
             if (e.target === overlayRef.current) {
                 onClose();
             }
-        }, role: "presentation", children: (0, jsx_runtime_1.jsxs)("div", { ref: dialogRef, role: "dialog", "aria-modal": "true", "aria-labelledby": titleId, className: "bg-surface rounded-xl shadow-xl max-w-md w-full max-h-[calc(100vh-2rem)] overflow-y-auto p-6", children: [(0, jsx_runtime_1.jsx)("h3", { id: titleId, className: "text-lg font-semibold text-neutral-900 dark:text-neutral-50 mb-4", children: title }), (0, jsx_runtime_1.jsx)("div", { className: "text-neutral-600 dark:text-neutral-400 mb-6", children: children }), (0, jsx_runtime_1.jsx)(ModalActions, { confirmLabel: confirmLabel, confirmVariant: confirmVariant, onClose: onClose, onConfirm: onConfirm, loading: loading })] }) }));
+        }, role: "presentation", children: (0, jsx_runtime_1.jsxs)("div", { ref: dialogRef, role: "dialog", "aria-modal": "true", "aria-labelledby": titleId, className: "bg-surface rounded-xl shadow-xl max-w-md w-full max-h-[calc(100vh-2rem)] overflow-y-auto p-6", children: [(0, jsx_runtime_1.jsx)("h3", { id: titleId, className: "text-lg font-semibold text-neutral-900 dark:text-neutral-50 mb-4", children: title }), (0, jsx_runtime_1.jsx)("div", { className: "text-neutral-600 dark:text-neutral-400 mb-6", children: children }), (0, jsx_runtime_1.jsx)(ModalActions, { confirmLabel: confirmLabel, confirmVariant: confirmVariant, onClose: onClose, onConfirm: onConfirm, loading: loading })] }) }), document.body);
 }

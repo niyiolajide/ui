@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useCallback, useId, type RefObject, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import Button from './Button'
 
 interface ModalProps {
@@ -140,11 +141,17 @@ export default function Modal({
   useModalKeyboard({ open, loading, onClose, dialogRef })
   useInitialModalFocus(open, dialogRef)
 
-  if (!open) {
+  // Portal to <body>: the shared Topbar uses `backdrop-blur`, and a backdrop-filter
+  // makes that element the containing block for `position: fixed` descendants. When the
+  // Modal renders inline inside the Topbar's actions slot (e.g. the Report button), a
+  // non-portaled `fixed inset-0` resolves to the ~56px topbar instead of the viewport, so
+  // `items-center` centers the dialog off the top of the screen (TASK-0499/0515 cut-off).
+  // Rendering into document.body escapes the transformed/blurred ancestor entirely.
+  if (!open || typeof document === 'undefined') {
     return null
   }
 
-  return (
+  return createPortal(
     <div
       ref={overlayRef}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-900/50"
@@ -164,6 +171,7 @@ export default function Modal({
         <div className="text-neutral-600 dark:text-neutral-400 mb-6">{children}</div>
         <ModalActions confirmLabel={confirmLabel} confirmVariant={confirmVariant} onClose={onClose} onConfirm={onConfirm} loading={loading} />
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
