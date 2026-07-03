@@ -147,7 +147,7 @@ export default function Modal({
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/50"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-900/50"
       onClick={(e) => {
         if (e.target === overlayRef.current) {onClose()}
       }}
@@ -158,7 +158,7 @@ export default function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="bg-surface rounded-xl shadow-xl max-w-md w-full mx-4 p-6"
+        className="bg-surface rounded-xl shadow-xl max-w-md w-full max-h-[calc(100vh-2rem)] overflow-y-auto p-6"
       >
         <h3 id={titleId} className="text-lg font-semibold text-neutral-900 dark:text-neutral-50 mb-4">{title}</h3>
         <div className="text-neutral-600 dark:text-neutral-400 mb-6">{children}</div>

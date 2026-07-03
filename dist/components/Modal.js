@@ -92,9 +92,9 @@ function Modal({ open, onClose, title, children, confirmLabel, confirmVariant = 
     if (!open) {
         return null;
     }
-    return ((0, jsx_runtime_1.jsx)("div", { ref: overlayRef, className: "fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/50", onClick: (e) => {
+    return ((0, jsx_runtime_1.jsx)("div", { ref: overlayRef, className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-900/50", onClick: (e) => {
             if (e.target === overlayRef.current) {
                 onClose();
             }
-        }, role: "presentation", children: (0, jsx_runtime_1.jsxs)("div", { ref: dialogRef, role: "dialog", "aria-modal": "true", "aria-labelledby": titleId, className: "bg-surface rounded-xl shadow-xl max-w-md w-full mx-4 p-6", children: [(0, jsx_runtime_1.jsx)("h3", { id: titleId, className: "text-lg font-semibold text-neutral-900 dark:text-neutral-50 mb-4", children: title }), (0, jsx_runtime_1.jsx)("div", { className: "text-neutral-600 dark:text-neutral-400 mb-6", children: children }), (0, jsx_runtime_1.jsx)(ModalActions, { confirmLabel: confirmLabel, confirmVariant: confirmVariant, onClose: onClose, onConfirm: onConfirm, loading: loading })] }) }));
+        }, role: "presentation", children: (0, jsx_runtime_1.jsxs)("div", { ref: dialogRef, role: "dialog", "aria-modal": "true", "aria-labelledby": titleId, className: "bg-surface rounded-xl shadow-xl max-w-md w-full max-h-[calc(100vh-2rem)] overflow-y-auto p-6", children: [(0, jsx_runtime_1.jsx)("h3", { id: titleId, className: "text-lg font-semibold text-neutral-900 dark:text-neutral-50 mb-4", children: title }), (0, jsx_runtime_1.jsx)("div", { className: "text-neutral-600 dark:text-neutral-400 mb-6", children: children }), (0, jsx_runtime_1.jsx)(ModalActions, { confirmLabel: confirmLabel, confirmVariant: confirmVariant, onClose: onClose, onConfirm: onConfirm, loading: loading })] }) }));
 }
