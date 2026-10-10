@@ -4,7 +4,7 @@ import type { AppInfo } from './AppSwitcher';
 import type { ShellUser } from './UserMenu';
 /** The shared application shell: consistent topbar (brand + app switcher + theme
  *  toggle + account menu) and optional left nav, across every app. */
-export default function AppShell({ appName, apps, currentKey, user, isAdmin, hubUrl, nav, topbarLeft, breadcrumbs, actions, themeToggle, report, children, }: {
+export default function AppShell({ appName, apps, currentKey, user, isAdmin, hubUrl, nav, topbarLeft, breadcrumbs, actions, themeToggle, report, sessionCheckUrl, children, }: {
     appName: string;
     apps: AppInfo[];
     currentKey?: string;
@@ -20,5 +20,8 @@ export default function AppShell({ appName, apps, currentKey, user, isAdmin, hub
     themeToggle?: boolean;
     /** Show the shared cross-app Report button in the topbar. Defaults to on. */
     report?: boolean;
+    /** Opt-in token-only check URL incl. base path (e.g. `/lifepulse/api/auth/session`).
+     *  Renders a null client child that reloads on 401; omit until the endpoint lands. */
+    sessionCheckUrl?: string;
     children: React.ReactNode;
 }): import("react").JSX.Element;

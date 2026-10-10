@@ -44,15 +44,39 @@ All flip automatically under `.dark` — one class, both modes (no app-local ram
 - `@niyi/ui` — `Button, Card, Input, Badge, StatCard, PageHeader, LoadingSpinner, EmptyState,
   Modal, Pagination, SegmentedControl, PageErrorState, PageEmptyState, ThemeProvider, useTheme,
   THEME_STORAGE_KEY, ThemeToggle, ThemeScript, themeScriptSource, cn`.
+- `@niyi/ui` (shell, opt-in) — `SessionRecheck, useHistorySessionRecheck` plus the
+  `AppShell` `sessionCheckUrl` prop (see below).
 - `@niyi/ui/tailwind-preset` — design tokens (colors incl. `ground`/`surface`/`ink`/`chart`,
   fonts, shadows, radius, spacing).
 - `@niyi/ui/styles.css` — base + component `@layer` CSS (`.btn`, `.card`, `.input`, `.badge`,
   typography, focus ring, reduced-motion handling).
 
+## History-session recheck (opt-in)
+
+Back/Forward restores pages from the client router cache (or the browser bfcache)
+without running the server page guard, so an expired session can keep showing a
+restored page. Pass the app's token-only check URL (full base path included) to
+opt in — omit it until the app's endpoint lands:
+
+```tsx
+<AppShell appName="LifePulse" apps={apps} sessionCheckUrl="/lifepulse/api/auth/session">
+```
+
+This renders a null client child that re-fetches `sessionCheckUrl` (`cache:
+'no-store'`) on `popstate` and persisted `pageshow` only — never on mount, push
+navigation, or fresh loads — and reloads the page on an exact 401 so the server
+guard redirects. Apps without AppShell (such as RetirementPulse) can use
+the pieces directly:
+
+```tsx
+import { SessionRecheck, useHistorySessionRecheck } from '@niyi/ui'
+```
+
 ## Develop
 ```bash
 npm install
 npm run build   # tsc → dist/ + restores 'use client' directives; commit dist
+node scripts/test-session-recheck.mjs   # history-session contract (after build)
 ```
 Changing a token/component = one PR here + a SHA bump in each app.
 

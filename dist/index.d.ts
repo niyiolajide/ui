@@ -27,6 +27,7 @@ export { default as UsageTracker, trackUsage, type UsageTrackerProps, type Usage
 export { ThemeProvider, useTheme, STORAGE_KEY as THEME_STORAGE_KEY } from './theme/ThemeProvider';
 export { default as ThemeToggle } from './theme/ThemeToggle';
 export { default as ThemeScript, themeScriptSource, type ThemeScriptProps, } from './theme/ThemeScript';
+export { default as SessionRecheck, useHistorySessionRecheck } from './shell/SessionRecheck';
 export { default as AppShell } from './shell/AppShell';
 export { default as Topbar } from './shell/Topbar';
 export { default as Sidebar, type NavGroup, type NavItem } from './shell/Sidebar';
