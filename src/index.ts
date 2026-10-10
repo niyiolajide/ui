@@ -43,6 +43,7 @@ export {
 } from './theme/ThemeScript'
 
 // Shell (cross-app chrome)
+export { default as SessionRecheck, useHistorySessionRecheck } from './shell/SessionRecheck'
 export { default as AppShell } from './shell/AppShell'
 export { default as Topbar } from './shell/Topbar'
 export { default as Sidebar, type NavGroup, type NavItem } from './shell/Sidebar'

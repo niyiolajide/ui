@@ -1,6 +1,7 @@
 import Topbar from './Topbar'
 import Sidebar, { type NavGroup } from './Sidebar'
 import Breadcrumbs, { type BreadcrumbItem } from './Breadcrumbs'
+import SessionRecheck from './SessionRecheck'
 import type { AppInfo } from './AppSwitcher'
 import type { ShellUser } from './UserMenu'
 
@@ -19,7 +20,7 @@ export default function AppShell({
   actions,
   themeToggle = true,
   report = true,
-  children,
+  sessionCheckUrl, children,
 }: {
   appName: string
   apps: AppInfo[]
@@ -36,10 +37,14 @@ export default function AppShell({
   themeToggle?: boolean
   /** Show the shared cross-app Report button in the topbar. Defaults to on. */
   report?: boolean
+  /** Opt-in token-only check URL incl. base path (e.g. `/lifepulse/api/auth/session`).
+   *  Renders a null client child that reloads on 401; omit until the endpoint lands. */
+  sessionCheckUrl?: string
   children: React.ReactNode
 }) {
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+      {sessionCheckUrl ? <SessionRecheck sessionCheckUrl={sessionCheckUrl} /> : null}
       <Topbar appName={appName} apps={apps} currentKey={currentKey} user={user} isAdmin={isAdmin} hubUrl={hubUrl} left={topbarLeft} actions={actions} themeToggle={themeToggle} report={report} />
       <div className="mx-auto flex w-full max-w-[1400px]">
         {nav && nav.length > 0 && (

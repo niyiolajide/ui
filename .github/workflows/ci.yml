@@ -24,3 +24,5 @@ jobs:
             git --no-pager diff --stat -- dist
             exit 1
           fi
+      - name: History-session effect lifecycle
+        run: docker run --rm --network none -v "$GITHUB_WORKSPACE:/src:ro" -w /src node:22-alpine node scripts/test-session-recheck.mjs
